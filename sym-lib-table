@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "kvm")(type "KiCad")(uri "${KIPRJMOD}/lib/kvm.kicad_sym")(options "")(descr "KVM board symbols"))
+)
