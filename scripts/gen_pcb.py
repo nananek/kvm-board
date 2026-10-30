@@ -412,8 +412,10 @@ class Builder:
         T("USB_HID_DM", [self.pad("J2", "B7"), (57.0, 6.25)],
           width=SIG_W)
         V("USB_HID_DM", 57.0, 6.25, size=0.35, drill=0.15)
-        T("USB_HID_DM", [(57.0, 5.25), (55.0, 5.25), (55.0, 6.25),
-                         (57.0, 6.25)], layer=pcbnew.B_Cu, width=SIG_W)
+        T("USB_HID_DM", [(57.0, 5.25), (57.0, 6.25)],
+          layer=pcbnew.B_Cu, width=SIG_W)
+        T("USB_HID_DM", [(57.0, 5.25), (55.0, 5.25)],
+          layer=pcbnew.B_Cu, width=SIG_W)
         T("USB_HID_DM", [(55.0, 5.25), (55.0, 10.15), (54.8, 10.15)],
           layer=pcbnew.B_Cu, width=SIG_W)
         V("USB_HID_DM", 54.8, 10.15, size=0.35, drill=0.15)
