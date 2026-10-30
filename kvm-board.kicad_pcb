@@ -5049,7 +5049,7 @@
 		)
 	)
 	(gr_text "A1"
-		(at 4.2 18.2 0)
+		(at 4.2 19.5 0)
 		(layer "F.SilkS")
 		(uuid "45ae469d-1f5a-4763-997e-65f01cacbec2")
 		(effects

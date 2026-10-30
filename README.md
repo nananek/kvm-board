@@ -133,6 +133,7 @@ sym-lib-table             kvm.kicad_sym の登録
 fab/                      ガーバー zip、BOM、CPL、KiCad 位置ファイル
 docs/                     回路図 PDF、基板画像
 scripts/                  設計データ生成スクリプト
+AGENT.md                  エージェント向けの再生成・検証手順
 ```
 
 ## 再生成
@@ -143,7 +144,10 @@ KiCad 10 の `kicad-cli` と Python の `pcbnew` が必要です。
 python3 scripts/gen_sch.py     # 回路図
 python3 scripts/gen_pcb.py     # 基板（ゼロから生成）
 ./scripts/export_fab.sh        # ガーバー、BOM、CPL
+./scripts/gen_docs_images.sh   # docs の基板画像
 ```
+
+Docker しかない場合は `scripts/kicad.sh` 経由で同じコマンドを実行できます。手順は [AGENT.md](AGENT.md) にまとめています。
 
 `kvm-board.kicad_pcb` は `scripts/gen_pcb.py` が生成します。GUI で直接編集すると次回の生成で上書きされるので、変更はスクリプト側に入れてください。回路図も同様に `scripts/gen_sch.py` から生成しています。
 

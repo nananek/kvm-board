@@ -200,8 +200,10 @@ class Builder:
         text("K", 50.95, 4.6, 0.8)
         text("K", 37.0, 5.2, 0.8)
         # A1 marks: J1 is rotated 90 deg (A1 pad at the bottom edge), J2 is
-        # rotated 270 deg (A1 pad at the top edge).
-        text("A1", 4.2, 18.2, 0.8)
+        # rotated 270 deg (A1 pad at the top edge).  J1's mark sits 5.5 mm from
+        # the connector centre so it clears both the 8.94 mm wide body and the
+        # footprint's silkscreen outline; J2's mark clears them at 5.2 mm.
+        text("A1", 4.2, 19.5, 0.8)
         text("A1", 52.2, 8.8, 0.8)
         text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
         text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
