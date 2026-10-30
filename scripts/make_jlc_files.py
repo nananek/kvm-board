@@ -14,8 +14,11 @@ FAB = os.path.join(ROOT, "fab")
 # JLCPCB places parts using the orientation of the part in their own library.
 # These offsets align KiCad footprints with the JLC library. The SOT-23-6
 # offset includes a further 90-degree counterclockwise placement adjustment.
+#
+# The USB-C receptacle (C165948) must NOT get an offset.  A +180 correction
+# makes JLCPCB rotate the part end-for-end, so the mouth faces into the board
+# and the contacts land about 8 mm away from the pads.  Keep it at 0 (absent).
 ROTATION_OFFSETS = (
-    ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 180),
     ("SO-16_3.9x9.9mm_P1.27mm", 270),
     ("SO-8_3.9x4.9mm_P1.27mm", 270),
     ("SOT-23-6", 270),
