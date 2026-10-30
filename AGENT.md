@@ -25,6 +25,7 @@ rootless Docker などで `/work` がコンテナ内で root 所有になる場�
 | 基板 | `./scripts/kicad.sh python3 scripts/gen_pcb.py` |
 | ガーバー、ドリル、BOM、CPL | `./scripts/kicad.sh ./scripts/export_fab.sh` |
 | `docs/pcb_top.png` など | `./scripts/kicad.sh ./scripts/gen_docs_images.sh` |
+| 実寸確認シート | `python3 scripts/gen_print_sheet.py` |
 
 `scripts/gen_pcb.py` で基板を作り直すと UUID が総入れ替えになり、差分が大きくなります。
 シルクの座標を動かすだけのような変更では、生成スクリプトと `kvm-board.kicad_pcb` の両方に同じ値を入れて、必要なファイルだけを再生成してください。

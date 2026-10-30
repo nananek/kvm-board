@@ -85,6 +85,15 @@ J1/J2 はどちらもデバイス側（CC に 5.1k の Rd）です。ホスト P
 
 基板外形は、公開されている FRISK ケースの 3D CAD モデルに合わせた **65.4 × 31.4 mm** です。
 
+### 実寸確認用シート
+
+紙に印刷してケースとの寸法を確認するときは [docs/print_check_a4.pdf](docs/print_check_a4.pdf) を使ってください。
+
+- A4 横、1:1。印刷時は「実際のサイズ / 100%」を選び、「用紙に合わせる」は使わないでください。
+- 実線が基板外形、破線がケースの内トレイ（66.4 × 32.4 mm）です。切り抜いてトレイに落とせます。
+- 下部の 100 mm 目盛りが 100 mm になっていなければ、印刷倍率がずれています。
+- `python3 scripts/gen_print_sheet.py` で作り直せます（基板外形は `kvm-board.kicad_pcb` の Edge.Cuts から読みます）。
+
 ### ケース寸法の出典
 
 - モデル配布ページ: [3D PRINT用モデルデータ — FRISK CASE](https://try3dcg.world.coocan.jp/note/3dPrint/3dPrint.html#FRISK-CASE)
