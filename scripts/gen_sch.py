@@ -147,6 +147,9 @@ def main():
         out.append(lib_symbol("PWR_FLAG"))
     out.append("  )\n")
 
+    # --- design notes ---
+    out.append(f'  (text "UART: U2.TXD(6) -> U1.RXD(8), U1.TXD(7) -> U2.RXD(7)" (at 177.8 69.85 0) (effects (font (size 1.2 1.2))))\n')
+    out.append(f'  (text "MODE0/1, CFG0/1, SET, DEF, RST: internal pull-up/pull-down -> Mode 0, protocol, 9600 bps" (at 205.74 114.3 0) (effects (font (size 1.2 1.2))))\n')
     # --- flags ---
     # --- part instances ---
     for part in PARTS:
