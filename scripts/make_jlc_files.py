@@ -12,6 +12,23 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FAB = os.path.join(ROOT, "fab")
 BOARD_H = 27.0
 
+# JLCPCB places parts using the orientation of the part in their own library.
+# These are the offsets between the KiCad footprint and the JLC library, from
+# the KiBot / Fabrication-Toolkit correction tables.
+ROTATION_OFFSETS = (
+    ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 180),
+    ("SO-16_3.9x9.9mm_P1.27mm", 270),
+    ("SO-8_3.9x4.9mm_P1.27mm", 270),
+    ("SOT-23-6", 180),
+)
+
+
+def rotation_offset(footprint):
+    for prefix, offset in ROTATION_OFFSETS:
+        if footprint == prefix:
+            return offset
+    return 0
+
 
 def clean_fp(fp):
     return fp.split(":", 1)[-1]
@@ -40,7 +57,7 @@ def write_cpl():
         w.writerow(["Designator", "Mid X", "Mid Y", "Layer", "Rotation"])
         for row in r:
             y = BOARD_H + float(row["PosY"])  # KiCad Y is negative = up
-            rot = float(row["Rot"]) % 360.0
+            rot = (float(row["Rot"]) + rotation_offset(row["Package"])) % 360.0
             w.writerow([row["Ref"], f"{float(row['PosX']):.4f}",
                         f"{y:.4f}", "Top", f"{rot:.1f}"])
     print("wrote", out)
