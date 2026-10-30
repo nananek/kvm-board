@@ -29,8 +29,8 @@ BOARD_W, BOARD_H = 65.4, 31.4
 CASE_CLEARANCE = 0.5
 
 # Connector centres in board coordinates (y from the top edge).
-J1_Y, J2_Y = 14.0, 5.5
-J1_X, J2_X = 3.629, 61.771
+J1_Y, J2_Y = 14.0, 5.7
+J1_X, J2_X = 2.129, 63.171
 SHELL_X, SHELL_Y = 8.94, 7.3  # footprint body before rotation (x, y)
 
 
@@ -207,7 +207,7 @@ def main():
     dim_v(s, BX - 8, BY, BY + BOARD_H, "31.4")
     dim_v(s, BX + BOARD_W + 4, BY, BY + 19.8, "19.8")
     dim_v(s, BX + BOARD_W + 11, BY + BOARD_H - J1_Y, BY + BOARD_H, "14.0")
-    dim_v(s, BX + BOARD_W + 18, BY + BOARD_H - J2_Y, BY + BOARD_H, "5.5")
+    dim_v(s, BX + BOARD_W + 18, BY + BOARD_H - J2_Y, BY + BOARD_H, "5.7")
 
     # --- legend ----------------------------------------------------------
     ly = 92.0
@@ -229,10 +229,13 @@ def main():
         "   board is 0.5 mm smaller on every side.",
         "5. The notch (6.8 x 19.8 mm) must clear the latch",
         "   island in the lower-right corner of the tray.",
-        "6. J1 (left) and J2 (right) mouths must sit on the case",
-        "   walls; cut about 10 x 4 mm openings there,",
-        "   1.4 to 5.1 mm above the tray floor.",
-        "7. There are no mounting holes: use tape or foam, with",
+        "6. J1 (left) and J2 (right) mouths protrude 1.5 mm",
+        "   and 1.4 mm past the board edge. Cut 10 x 4 mm",
+        "   openings through the whole wall, 1.4 to 5.1 mm",
+        "   above the tray floor.",
+        "7. Chamfer the outside of each opening by about 0.3 mm,",
+        "   and centre the board in the tray.",
+        "8. There are no mounting holes: use tape or foam, with",
         "   about 1 mm spacer under the board.",
     ]
     for i, line in enumerate(lines):
@@ -244,7 +247,8 @@ def main():
         "case tray      66.4 x 32.4",
         "case outer     69 x 37, tray depth 9.8",
         "J1 centre      14.0 from the top edge",
-        "J2 centre      5.5 from the top edge",
+        "J2 centre      5.7 from the top edge",
+        "mouth          J1 1.5 / J2 1.4 mm past the edge",
         "notch          6.8 x 19.8, lower-right",
     ]):
         s.text(line, nx, 99.0 - i * 5.2, 2.9)
