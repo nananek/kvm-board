@@ -12,13 +12,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FAB = os.path.join(ROOT, "fab")
 
 # JLCPCB places parts using the orientation of the part in their own library.
-# These are the offsets between the KiCad footprint and the JLC library, from
-# the KiBot / Fabrication-Toolkit correction tables.
+# These offsets align KiCad footprints with the JLC library. The SOT-23-6
+# offset includes a further 90-degree counterclockwise placement adjustment.
 ROTATION_OFFSETS = (
     ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 180),
     ("SO-16_3.9x9.9mm_P1.27mm", 270),
     ("SO-8_3.9x4.9mm_P1.27mm", 270),
-    ("SOT-23-6", 180),
+    ("SOT-23-6", 270),
 )
 
 

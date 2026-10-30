@@ -73,7 +73,7 @@ J1/J2 はどちらもデバイス側（CC に 5.1k の Rd）です。ホスト P
   - ガーバー: `fab/kvm-board-gerbers.zip`
   - BOM: `fab/bom_jlcpcb.csv`
   - CPL: `fab/cpl_jlcpcb.csv`
-- ガーバー、ドリル、CPL はすべて基板左下を原点にした座標です（KiCad のドリル/配置原点を使用）。ガーバー zip と CPL はセットで再アップロードしてください。JLCPCB の部品ライブラリ向けの回転補正を入れてあります（Type-C +180°、SO-8/SO-16 +270°、SOT-23-6 +180°。SOD-323/LED/0603 は補正なし）。補正値は `scripts/make_jlc_files.py` にあります。実装プレビューで向きを確認してください。
+- ガーバー、ドリル、CPL はすべて基板左下を原点にした座標です（KiCad のドリル/配置原点を使用）。ガーバー zip と CPL はセットで再アップロードしてください。JLCPCB の部品ライブラリ向けの回転補正を入れてあります（Type-C +180°、SO-8/SO-16 +270°、SOT-23-6 +270°。SOD-323/LED/0603 は補正なし）。補正値は `scripts/make_jlc_files.py` にあります。実装プレビューで向きを確認してください。
 
 注意:
 
