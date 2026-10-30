@@ -132,7 +132,7 @@ def main():
     out.append('    (title "CH9329 USB KVM emulator board")\n')
     out.append('    (rev "A")\n')
     out.append('    (comment 1 "UART(USB serial) to USB HID keyboard/mouse")\n')
-    out.append('    (comment 2 "Fits a Frisk mint tin: 56 x 27 mm")\n')
+    out.append('    (comment 2 "Fits the published FRISK-CASE 3D model: 65.4 x 31.4 mm")\n')
     out.append("  )\n")
 
     # --- lib symbols (only those used) ---

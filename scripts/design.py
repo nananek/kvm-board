@@ -150,8 +150,10 @@ p = [
                "2": GND, "5": "VBUS_SER"}),
     dict(ref="D4", value="USBLC6-2SC6", sym="USBLC6",
          fp="KVM:SOT-23-6", lcsc="C7519",
-         pins={"1": "USB_HID_DP", "6": "USB_HID_DP",
-               "3": "USB_HID_DM", "4": "USB_HID_DM",
+         # The two USBLC6 channels are electrically identical.  D4 uses
+         # I/O1 for D- and I/O2 for D+ so the J2 fanout does not cross.
+         pins={"1": "USB_HID_DM", "6": "USB_HID_DM",
+               "3": "USB_HID_DP", "4": "USB_HID_DP",
                "2": GND, "5": "VBUS_HID"}),
     dict(ref="R1", value="5.1k", sym="R", fp="KVM:R_0603_1608Metric", lcsc="C23186",
          pins={"1": "CC1_SER", "2": GND}),
