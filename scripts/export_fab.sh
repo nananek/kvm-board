@@ -17,7 +17,13 @@ kicad-cli pcb export drill --format excellon --excellon-units mm --excellon-sepa
   --drill-origin plot \
   -o "$FAB/gerbers/" "$PROJECT.kicad_pcb"
 
-(cd "$FAB/gerbers" && zip -q -r ../"$PROJECT-gerbers.zip" .)
+(cd "$FAB/gerbers" && python3 -c '
+import glob, os, sys, zipfile
+with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
+    for path in sorted(glob.glob("*")):
+        if os.path.isfile(path):
+            z.write(path, path)
+' "../$PROJECT-gerbers.zip")
 
 kicad-cli pcb export pos --format csv --units mm --side front --use-drill-file-origin \
   -o "$FAB/pos_kicad.csv" "$PROJECT.kicad_pcb"

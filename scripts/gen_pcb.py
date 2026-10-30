@@ -2,7 +2,7 @@
 
 Layout summary
 --------------
-Board 56 x 28 mm (fits the inner tray of a Frisk mint tin: 58.8 x 32.8 x 9.1).
+Board 56 x 27 mm (fits the inner tray of a Frisk mint tin: 58.8 x 32.8 x 9.1).
 J1 = serial (CH340N) Type-C on the left short edge, J2 = HID (CH9329)
 Type-C on the right short edge.  Both connectors are sinks (5.1k CC pulldowns).
 +5V is diode-OR'ed from both VBUS pins and distributed on the top layer.
@@ -123,7 +123,11 @@ class Builder:
         v.SetPosition(P(x, y))
         v.SetWidth(pcbnew.FromMM(VIA_D))
         v.SetDrill(pcbnew.FromMM(VIA_DRILL))
-        v.SetViaType(pcbnew.VIATYPE_THROUGH)
+        try:
+            v.SetViaType(pcbnew.VIATYPE_THROUGH)
+        except AttributeError:
+            # KiCad 9 removed the VIATYPE_* constants; a new PCB_VIA is through.
+            pass
         v.SetLayerPair(pcbnew.F_Cu, pcbnew.B_Cu)
         v.SetNet(self.nets[net])
         self.board.Add(v)
@@ -195,7 +199,9 @@ class Builder:
         text("K", 12.05, 4.6, 0.8)
         text("K", 50.95, 4.6, 0.8)
         text("K", 37.0, 5.2, 0.8)
-        text("A1", 4.2, 8.8, 0.8)
+        # A1 marks: J1 is rotated 90 deg (A1 pad at the bottom edge), J2 is
+        # rotated 270 deg (A1 pad at the top edge).
+        text("A1", 4.2, 18.2, 0.8)
         text("A1", 52.2, 8.8, 0.8)
         text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
         text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
@@ -369,9 +375,15 @@ class Builder:
             V(GND, x, y)
 
     def finish(self):
-        filler = pcbnew.ZONE_FILLER(self.board)
-        filler.Fill(self.board.Zones())
-        pcbnew.SaveBoard(os.path.join(ROOT, f"{PROJECT}.kicad_pcb"), self.board)
+        path = os.path.join(ROOT, f"{PROJECT}.kicad_pcb")
+        # KiCad 10 crashes when the zone filler runs on a board that only exists
+        # in memory, so write it out and fill the reloaded copy.
+        pcbnew.SaveBoard(path, self.board)
+        board = pcbnew.LoadBoard(path)
+        board.BuildConnectivity()
+        filler = pcbnew.ZONE_FILLER(board)
+        filler.Fill(board.Zones())
+        pcbnew.SaveBoard(path, board)
 
 
 def main():
