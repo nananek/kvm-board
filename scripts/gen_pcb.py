@@ -5,7 +5,9 @@ Layout summary
 Board 65.4 x 31.4 mm, shaped to the published FRISK-CASE 3D model
 (66.4 x 32.4 mm inner tray with a latch island in one corner).
 J1 = serial (CH340N) Type-C on the left short edge, J2 = HID (CH9329)
-Type-C on the right short edge.  Both connectors are sinks (5.1k CC pulldowns).
+Type-C on the right short edge.  Both connector mouths overhang the board
+edge (J1 1.5 mm, J2 1.4 mm) so a plug can reach them through the case wall.
+Both connectors are sinks (5.1k CC pulldowns).
 +5V is diode-OR'ed from both VBUS pins and distributed on the top layer.
 GND is a copper pour on both layers.
 """
@@ -30,8 +32,8 @@ THICKNESS = 1.6
 
 # reference -> (footprint name, x, y, rotation)
 PLACE = {
-    "J1": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 3.629, 14.0, 270),
-    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 61.771, 5.5, 90),
+    "J1": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 2.129, 14.0, 270),
+    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 63.171, 5.7, 90),
     "U2": ("SO-8_3.9x4.9mm_P1.27mm", 19.5, 14.0, 0),
     "U1": ("SO-16_3.9x9.9mm_P1.27mm", 36.5, 14.0, 0),
     "D1": ("D_SOD-323", 11.0, 6.0, 180),
@@ -247,7 +249,7 @@ class Builder:
         # A1 marks: J1 is rotated 270 deg (A1 pad at the top edge), J2 is
         # rotated 90 deg (A1 pad at the bottom edge).  J2 moved to the
         # upper-right lobe of the case, above the latch notch.
-        text("A1", 4.2, 8.8, 0.8)
+        text("A1", 3.5, 8.3, 0.8)
         text("A1", 61.6, 11.0, 0.8)
         text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
         text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
@@ -262,14 +264,14 @@ class Builder:
         # serial VBUS: both VBUS pads -> back layer -> D1 anode
         for num in ("A4", "A9"):
             V("VBUS_SER", *self.pad("J1", num))
-        T("VBUS_SER", [self.pad("J1", "A4"), (7.674, 12.0), (4.0, 12.0)],
+        T("VBUS_SER", [self.pad("J1", "A4"), (7.674, 12.0), (3.8, 12.0)],
           layer=pcbnew.B_Cu, width=PWR_W)
-        T("VBUS_SER", [self.pad("J1", "A9"), (7.674, 15.8), (4.0, 15.8),
-                       (4.0, 6.0), (9.8, 6.0)], layer=pcbnew.B_Cu, width=PWR_W)
+        T("VBUS_SER", [self.pad("J1", "A9"), (7.674, 15.8), (3.8, 15.8),
+                       (3.8, 6.0), (9.8, 6.0)], layer=pcbnew.B_Cu, width=PWR_W)
         V("VBUS_SER", 9.8, 6.0)
         T("VBUS_SER", [(9.8, 6.0), self.pad("D1", "2")], width=PWR_W)
         # ESD clamp and local decoupling on the same VBUS rail
-        T("VBUS_SER", [(4.0, 7.5), (14.8, 7.5), (14.8, 13.5)],
+        T("VBUS_SER", [(3.8, 7.5), (14.8, 7.5), (14.8, 13.5)],
           layer=pcbnew.B_Cu, width=SIG_W)
         V("VBUS_SER", 14.8, 13.5)
         T("VBUS_SER", [(14.8, 13.5), self.pad("D3", "5")], width=SIG_W)
@@ -402,7 +404,7 @@ class Builder:
         T("USB_HID_DP", [(40.0, 14.0), self.pad("U1", "12")], width=SIG_W)
 
         # ---------------- CC pulldowns (serial side) ----------------
-        T("CC1_SER", [self.pad("J1", "A5"), (5.2, 12.75), (5.2, 21.0),
+        T("CC1_SER", [self.pad("J1", "A5"), (3.7, 12.75), (3.7, 21.0),
                       (6.175, 21.0), self.pad("R1", "1")], width=SIG_W)
         T("CC2_SER", [self.pad("J1", "B5"), (9.0, 15.75), (9.0, 15.2),
                       (10.0, 15.2), (10.0, 13.0)], width=SIG_W)
