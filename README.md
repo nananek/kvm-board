@@ -6,6 +6,7 @@ MR-CH9329EMU-USB（マルツの CH9329 モジュール）の代替を JLCPCB の
 
 - 基板: 56 × 27 × 1.6 mm、2 層、フリスクケースの内トレイに収まる寸法
 - 回路図: [docs/schematic.pdf](docs/schematic.pdf)
+- データシートとシルクの対応: [docs/datasheets.md](docs/datasheets.md)
 - 配線図: [docs/pcb_routing.png](docs/pcb_routing.png)（GND ベタを消して配線を見やすくしたもの）
 - 部品: 21 点、10 種類。すべて JLCPCB の在庫部品（2026-10 時点）
 - ファームウェア不要。CH9329 の内蔵ファームで動きます

@@ -188,6 +188,17 @@ class Builder:
         text("SERIAL / CH340", 13.0, 25.0, 1.0)
         text("HID / CH9329", 43.0, 25.0, 1.0)
         text("KVM-BOARD  CH9329EMU-USB replacement", 28.0, 2.4, 0.9, 0.13)
+        # pin-1 / polarity marks for datasheet comparison
+        text("1", 33.8, 8.5, 0.8)
+        text("1", 14.0, 10.6, 0.8)
+        text("1", 10.0, 11.0, 0.8)
+        text("K", 12.05, 4.6, 0.8)
+        text("K", 50.95, 4.6, 0.8)
+        text("K", 37.0, 5.2, 0.8)
+        text("A1", 4.2, 8.8, 0.8)
+        text("A1", 52.2, 8.8, 0.8)
+        text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
+        text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
 
     # -- routing -------------------------------------------------------
     def route(self):
