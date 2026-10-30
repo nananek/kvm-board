@@ -26,9 +26,12 @@ rootless Docker などで `/work` がコンテナ内で root 所有になる場�
 | ガーバー、ドリル、BOM、CPL | `./scripts/kicad.sh ./scripts/export_fab.sh` |
 | `docs/pcb_top.png` など | `./scripts/kicad.sh ./scripts/gen_docs_images.sh` |
 | 実寸確認シート | `python3 scripts/gen_print_sheet.py` |
+| リポジトリ QR（URL 変更時のみ） | `python3 scripts/make_repo_qr.py`（`qrcode` が必要） |
 
 `scripts/gen_pcb.py` で基板を作り直すと UUID が総入れ替えになり、差分が大きくなります。
 シルクの座標を動かすだけのような変更では、生成スクリプトと `kvm-board.kicad_pcb` の両方に同じ値を入れて、必要なファイルだけを再生成してください。
+
+基板裏面の QR コードは `scripts/repo_qr.txt` を読み込んで描きます。URL を変えたときだけ `scripts/make_repo_qr.py` で作り直してください。テストパッド TP1/TP2 は実装しない部品なので、BOM と CPL には入りません。
 
 ## 検証
 

@@ -30,6 +30,11 @@ def symbol_pins(sym):
 
 
 def graphic(name, sym):
+    if sym == "TP":
+        return (
+            '      (circle (center 0 0) (radius 1.27) '
+            '(stroke (width 0.254) (type default)) (fill (type none)))\n'
+        )
     if sym in SYMBOLS:
         hw = SYMBOLS[sym]["halfw"]
         hh = SYMBOLS[sym]["height"]
@@ -110,6 +115,7 @@ LAYOUT = {
     "C5": (228.6, 203.2), "C6": (274.32, 203.2), "C7": (320.04, 203.2),
     "D1": (50.8, 238.76), "D2": (95.25, 238.76), "D3": (139.7, 238.76), "D4": (184.15, 238.76),
     "R5": (50.8, 264.16), "LED1": (95.25, 264.16),
+    "TP1": (215.9, 139.7), "TP2": (215.9, 149.86),
 }
 
 STUB = 3.81
@@ -150,6 +156,7 @@ def main():
     # --- design notes ---
     out.append(f'  (text "UART: U2.TXD(6) -> U1.RXD(8), U1.TXD(7) -> U2.RXD(7)" (at 177.8 69.85 0) (effects (font (size 1.2 1.2))))\n')
     out.append(f'  (text "MODE0/1, CFG0/1, SET, DEF, RST: internal pull-up/pull-down -> Mode 0, protocol, 9600 bps" (at 205.74 114.3 0) (effects (font (size 1.2 1.2))))\n')
+    out.append(f'  (text "TP1=SET, TP2=GND: short them while changing the CH9329 settings" (at 152.4 134.62 0) (effects (font (size 1.2 1.2))))\n')
     # --- flags ---
     # --- part instances ---
     for part in PARTS:

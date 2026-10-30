@@ -53,6 +53,8 @@ def clean_fp(fp):
 def write_bom():
     groups = OrderedDict()
     for part in PARTS:
+        if not part.get("fitted", True):
+            continue
         key = (part["value"], clean_fp(part["fp"]), part["lcsc"])
         groups.setdefault(key, []).append(part["ref"])
     path = os.path.join(FAB, "bom_jlcpcb.csv")
@@ -67,11 +69,14 @@ def write_bom():
 def write_cpl():
     src = os.path.join(FAB, "pos_kicad.csv")
     out = os.path.join(FAB, "cpl_jlcpcb.csv")
+    fitted = {part["ref"] for part in PARTS if part.get("fitted", True)}
     with open(src, newline="") as fi, open(out, "w", newline="") as fo:
         r = csv.DictReader(fi)
         w = csv.writer(fo)
         w.writerow(["Designator", "Mid X", "Mid Y", "Layer", "Rotation"])
         for row in r:
+            if row["Ref"] not in fitted:
+                continue
             # pos export uses the drill/place origin (bottom-left), so Y is
             # already 0..27 with the same origin as the gerbers
             kicad_rot = float(row["Rot"])

@@ -5,6 +5,7 @@ is guaranteed to be identical between the two.
 """
 
 PROJECT = "kvm-board"
+REPO_URL = "https://github.com/nananek/kvm-board"
 
 # ---------------------------------------------------------------------------
 # Symbols (library coordinates: +Y is up, as in .kicad_sym files)
@@ -84,6 +85,10 @@ SYMBOLS = {
             ("R", "4", "I/O2", "bidirectional", -2.54),
         ],
     ),
+    "TP": dict(
+        halfw=1.27, height=1.27,
+        pins=[("L", "1", "~", "passive", 0.0)],
+    ),
 }
 
 PASSIVES = {
@@ -127,7 +132,7 @@ p = [
          pins={
              "1": "LED_ACT", "2": None, "3": None, "4": None, "5": None, "6": None,
              "7": "UART_9329_TX", "8": "UART_9329_RX",
-             "9": None, "10": None, "11": None,
+             "9": None, "10": None, "11": "SET",
              "12": "USB_HID_DP", "13": "USB_HID_DM", "14": GND, "15": P5V,
              "16": "V33",
          }),
@@ -181,6 +186,11 @@ p = [
          pins={"1": "VBUS_SER", "2": GND}),
     dict(ref="C7", value="100nF", sym="C", fp="KVM:C_0603_1608Metric", lcsc="C14663",
          pins={"1": "VBUS_HID", "2": GND}),
+    # Bare test pads: TP1 = CH9329 SET, TP2 = GND.  Not fitted parts.
+    dict(ref="TP1", value="SET", sym="TP", fp="KVM:TestPoint_1P", lcsc="",
+         fitted=False, pins={"1": "SET"}),
+    dict(ref="TP2", value="GND", sym="TP", fp="KVM:TestPoint_1P", lcsc="",
+         fitted=False, pins={"1": GND}),
 ]
 PARTS = p
 

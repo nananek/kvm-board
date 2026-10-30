@@ -8,7 +8,7 @@ MR-CH9329EMU-USB（マルツの CH9329 モジュール）の代替を JLCPCB の
 - 回路図: [docs/schematic.pdf](docs/schematic.pdf)
 - データシートとシルクの対応: [docs/datasheets.md](docs/datasheets.md)
 - 配線図: [docs/pcb_routing.png](docs/pcb_routing.png)（GND ベタを消して配線を見やすくしたもの）
-- 部品: 21 点、10 種類。すべて JLCPCB の在庫部品（2026-10 時点）
+- 部品: 21 点、10 種類。すべて JLCPCB の在庫部品（2026-10 時点）。このほかに、実装しないテストパッドを 2 点置いています
 - ファームウェア不要。CH9329 の内蔵ファームで動きます
 
 ## 仕様
@@ -23,8 +23,14 @@ MR-CH9329EMU-USB（マルツの CH9329 モジュール）の代替を JLCPCB の
 | シリアル | 9600 bps / 8N1（CH9329 出荷時設定） |
 | 動作モード | CH9329 Mode 0（キーボード + マウス + カスタム HID の複合デバイス）、プロトコルモード |
 | 表示 | ACT# の LED（HID 側の USB 設定完了で点灯） |
+| テストパッド | TP1 (SET) / TP2 (GND)。CH9329 の設定変更用 |
+| シルク | 表: 部品名とピン極性、裏: リポジトリの QR コード |
 
 J1/J2 はどちらもデバイス側（CC に 5.1k の Rd）です。ホスト PC とは C-to-C でも C-to-A でも接続できます。充電器は接続しないでください。
+
+基板裏面にはリポジトリ（<https://github.com/nananek/kvm-board>）の QR コードをシルクで入れています。ケースに組み込む前ならスマートフォンで読み取れます。
+
+![基板裏面](docs/pcb_bottom.png)
 
 ## 回路
 
@@ -37,8 +43,19 @@ J1/J2 はどちらもデバイス側（CC に 5.1k の Rd）です。ホスト P
 - CH340N: 5 V 給電。V3 に 0.1 µF。内蔵クロックなので水晶なし。
 - ESD: 各ポートに USBLC6-2SC6。クランプ用の VBUS ピンは各ポートのローカル VBUS に接続し、100nF (C6/C7) で GND にデカップリング。
 - 5 V は BAT54WS ×2 で OR 接続。IC には約 4.7 V が入ります（CH340N の最低 4.0 V、CH9329 の最低 3.7 V の範囲内）。
-- CH9329 の MODE0/MODE1、CFG0/CFG1、SET、DEF、RST は未接続。内蔵プルアップ/プルダウンで Mode 0・プロトコルモード・9600 bps になります。UP は 5 V 動作なので未接続です。
-- 設定を変えたい場合は U1 の 11 番 (SET) を GND に落としてから WCH の設定ツールで書き換えます。SET はテストパッドを出していないので、必要なら U1 のピンに直接配線してください。
+- CH9329 の MODE0/MODE1、CFG0/CFG1、DEF、RST は未接続。内蔵プルアップ/プルダウンで Mode 0・プロトコルモード・9600 bps になります。UP は 5 V 動作なので未接続です。
+- SET はテストパッド TP1 に、GND は TP2 に引き出しています。
+
+### 設定の書き換え（TP1 / TP2）
+
+U1 の右側に 1.7 mm のテストパッドを 2 つ出しています。
+
+| パッド | 接続 | 位置 |
+| --- | --- | --- |
+| TP1 | CH9329 SET (pin 11) | U1 の右側、左のパッド |
+| TP2 | GND | U1 の右側、右のパッド |
+
+ピッチは 2.54 mm です。ピンセットやジャンパワイヤで TP1 と TP2 を短絡したまま、J1 側から WCH の設定ツールで書き換えます。書き換えが終わったら短絡を外してください。通常動作では SET は内蔵プルアップのままです。
 
 ## 部品表
 
@@ -168,6 +185,8 @@ python3 scripts/gen_pcb.py     # 基板（ゼロから生成）
 ./scripts/export_fab.sh        # ガーバー、BOM、CPL
 ./scripts/gen_docs_images.sh   # docs の基板画像
 ```
+
+リポジトリの URL を変えたときだけ、`python3 scripts/make_repo_qr.py` で `scripts/repo_qr.txt` を作り直してください（`qrcode` パッケージが必要です）。基板の生成はこのテキストファイルを読むだけなので、通常のビルドに `qrcode` は要りません。
 
 Docker しかない場合は `scripts/kicad.sh` 経由で同じコマンドを実行できます。手順は [AGENT.md](AGENT.md) にまとめています。
 
