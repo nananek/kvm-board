@@ -25,14 +25,14 @@ THICKNESS = 1.6
 
 # reference -> (footprint name, x, y, rotation)
 PLACE = {
-    "J1": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 5.2, 14.0, 90),
-    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 50.8, 14.0, 270),
-    "U2": ("SO-8_3.9x4.9mm_P1.27mm", 18.0, 14.0, 0),
-    "U1": ("SO-16_3.9x9.9mm_P1.27mm", 38.0, 14.0, 0),
+    "J1": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 3.629, 14.0, 270),
+    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 52.371, 14.0, 90),
+    "U2": ("SO-8_3.9x4.9mm_P1.27mm", 19.5, 14.0, 0),
+    "U1": ("SO-16_3.9x9.9mm_P1.27mm", 36.5, 14.0, 0),
     "D1": ("D_SOD-323", 11.0, 6.0, 180),
     "D2": ("D_SOD-323", 52.0, 6.0, 0),
-    "D3": ("SOT-23-6", 11.6, 13.5, 0),
-    "D4": ("SOT-23-6", 44.5, 13.5, 180),
+    "D3": ("SOT-23-6", 13.0, 13.5, 0),
+    "D4": ("SOT-23-6", 43.0, 13.5, 180),
     "R1": ("R_0603_1608Metric", 7.0, 21.5, 0),
     "R2": ("R_0603_1608Metric", 13.0, 8.5, 0),
     "R3": ("R_0603_1608Metric", 46.9, 7.6, 180),
@@ -40,8 +40,8 @@ PLACE = {
     "R5": ("R_0603_1608Metric", 31.0, 4.0, 0),
     "LED1": ("LED_0603_1608Metric", 35.0, 4.0, 180),
     "C1": ("C_0603_1608Metric", 43.675, 9.0, 180),
-    "C2": ("C_0603_1608Metric", 16.5, 17.5, 180),
-    "C3": ("C_0603_1608Metric", 23.4, 11.5, 0),
+    "C2": ("C_0603_1608Metric", 15.5, 17.5, 180),
+    "C3": ("C_0603_1608Metric", 25.2, 11.5, 0),
     "C4": ("C_0603_1608Metric", 41.5, 7.0, 0),
     "C5": ("C_0805_2012Metric", 29.0, 8.0, 0),
     "C6": ("C_0603_1608Metric", 11.0, 16.2, 0),
@@ -95,12 +95,22 @@ class Builder:
             if part["ref"] not in ("U1", "U2"):
                 fp.Reference().SetVisible(False)
                 fp.Value().SetVisible(False)
+            if part["ref"] in ("J1", "J2"):
+                for g in fp.GraphicalItems():
+                    if g.GetLayer() == pcbnew.F_SilkS:
+                        bb = g.GetBoundingBox()
+                        x0 = pcbnew.ToMM(bb.GetX())
+                        x1 = x0 + pcbnew.ToMM(bb.GetWidth())
+                        if x0 < 1.0 or x1 > 55.0:
+                            g.SetLayer(pcbnew.F_Fab)
             for pad in fp.Pads():
                 num = pad.GetNumber()
                 pad.SetLocalSolderMaskMargin(0)
                 net = part["pins"].get(num)
                 if net:
                     pad.SetNet(self.nets[net])
+                if net == GND:
+                    pad.SetLocalZoneConnection(pcbnew.ZONE_CONNECTION_FULL)
                 self.pads[(part["ref"], num)] = pad
 
     # -- geometry helpers ---------------------------------------------
@@ -118,11 +128,11 @@ class Builder:
             t.SetNet(self.nets[net])
             self.board.Add(t)
 
-    def via(self, net, x, y):
+    def via(self, net, x, y, size=VIA_D, drill=VIA_DRILL):
         v = pcbnew.PCB_VIA(self.board)
         v.SetPosition(P(x, y))
-        v.SetWidth(pcbnew.FromMM(VIA_D))
-        v.SetDrill(pcbnew.FromMM(VIA_DRILL))
+        v.SetWidth(pcbnew.FromMM(size))
+        v.SetDrill(pcbnew.FromMM(drill))
         try:
             v.SetViaType(pcbnew.VIATYPE_THROUGH)
         except AttributeError:
@@ -172,6 +182,7 @@ class Builder:
             z.SetMinThickness(pcbnew.FromMM(0.2))
             z.SetThermalReliefGap(pcbnew.FromMM(0.25))
             z.SetThermalReliefSpokeWidth(pcbnew.FromMM(0.3))
+            z.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
             o = z.Outline()
             o.NewOutline()
             for x, y in outline:
@@ -193,18 +204,18 @@ class Builder:
         text("HID / CH9329", 43.0, 25.0, 1.0)
         text("KVM-BOARD  CH9329EMU-USB replacement", 28.0, 2.4, 0.9, 0.13)
         # pin-1 / polarity marks for datasheet comparison
-        text("1", 33.8, 8.5, 0.8)
+        text("1", 32.2, 8.2, 0.8)
         text("1", 14.0, 10.6, 0.8)
         text("1", 10.0, 11.0, 0.8)
         text("K", 12.05, 4.6, 0.8)
         text("K", 50.95, 4.6, 0.8)
         text("K", 37.0, 5.2, 0.8)
-        # A1 marks: J1 is rotated 90 deg (A1 pad at the bottom edge), J2 is
-        # rotated 270 deg (A1 pad at the top edge).  J1's mark sits 5.5 mm from
-        # the connector centre so it clears both the 8.94 mm wide body and the
-        # footprint's silkscreen outline; J2's mark clears them at 5.2 mm.
-        text("A1", 4.2, 19.5, 0.8)
-        text("A1", 52.2, 8.8, 0.8)
+        # A1 marks: J1 is rotated 270 deg (A1 pad at the top edge), J2 is
+        # rotated 90 deg (A1 pad at the bottom edge).  The marks sit outside
+        # the 8.94 mm wide body; the 0.3 mm difference clears the footprint's
+        # silkscreen outline on each side.
+        text("A1", 4.2, 8.8, 0.8)
+        text("A1", 52.2, 19.5, 0.8)
         text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
         text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
 
@@ -216,123 +227,127 @@ class Builder:
         # ---------------- +5V (diode OR of both VBUS) ----------------
         T(P5V, [(12.05, 6.0), (50.95, 6.0)], width=PWR_W)
         # serial VBUS: both VBUS pads -> back layer -> D1 anode
-        V("VBUS_SER", *self.pad("J1", "A9"))
-        V("VBUS_SER", *self.pad("J1", "A4"))
-        T("VBUS_SER", [self.pad("J1", "A9"), self.pad("J1", "A4")],
+        for num in ("A4", "A9"):
+            V("VBUS_SER", *self.pad("J1", num))
+        T("VBUS_SER", [self.pad("J1", "A4"), (7.674, 12.0), (4.0, 12.0)],
           layer=pcbnew.B_Cu, width=PWR_W)
-        T("VBUS_SER", [(1.155, 16.0), (9.9, 16.0), (9.9, 6.0), (9.2, 6.0)],
-          layer=pcbnew.B_Cu, width=PWR_W)
-        V("VBUS_SER", 9.2, 6.0)
-        T("VBUS_SER", [(9.2, 6.0), self.pad("D1", "2")], width=PWR_W)
+        T("VBUS_SER", [self.pad("J1", "A9"), (7.674, 15.8), (4.0, 15.8),
+                       (4.0, 6.0), (9.8, 6.0)], layer=pcbnew.B_Cu, width=PWR_W)
+        V("VBUS_SER", 9.8, 6.0)
+        T("VBUS_SER", [(9.8, 6.0), self.pad("D1", "2")], width=PWR_W)
+        # ESD clamp and local decoupling on the same VBUS rail
+        T("VBUS_SER", [(4.0, 7.5), (14.8, 7.5), (14.8, 13.5)],
+          layer=pcbnew.B_Cu, width=SIG_W)
+        V("VBUS_SER", 14.8, 13.5)
+        T("VBUS_SER", [(14.8, 13.5), self.pad("D3", "5")], width=SIG_W)
+        T("VBUS_SER", [self.pad("J1", "A9"), (10.0, 16.2)],
+          layer=pcbnew.B_Cu, width=SIG_W)
+        V("VBUS_SER", 10.0, 16.2)
+        T("VBUS_SER", [(10.0, 16.2), self.pad("C6", "1")], width=SIG_W)
+        T(GND, [self.pad("C6", "2"), (12.0, 17.0)], width=SIG_W)
+        V(GND, 12.0, 17.0)
+
         # HID VBUS
-        V("VBUS_HID", *self.pad("J2", "A4"))
-        V("VBUS_HID", *self.pad("J2", "A9"))
-        T("VBUS_HID", [self.pad("J2", "A4"), self.pad("J2", "A9")],
-          layer=pcbnew.B_Cu, width=PWR_W)
-        T("VBUS_HID", [(54.845, 11.8), (52.4, 11.8), (52.4, 6.5)],
-          layer=pcbnew.B_Cu, width=PWR_W)
-        V("VBUS_HID", 52.4, 6.5)
-        T("VBUS_HID", [(52.4, 6.5), self.pad("D2", "2")], width=PWR_W)
+        for num in ("A4", "A9"):
+            V("VBUS_HID", *self.pad("J2", num))
+        T("VBUS_HID", [self.pad("J2", "A9"), (48.326, 12.0), (52.2, 12.0)], layer=pcbnew.B_Cu, width=PWR_W)
+        T("VBUS_HID", [self.pad("J2", "A4"), (48.326, 15.8), (52.2, 15.8),
+                       (52.2, 6.5), (51.5, 6.5)], layer=pcbnew.B_Cu, width=PWR_W)
+        V("VBUS_HID", 51.5, 6.5)
+        T("VBUS_HID", [(51.5, 6.5), self.pad("D2", "2")], width=PWR_W)
+        T("VBUS_HID", [(52.2, 8.5), (41.2, 8.5), (41.2, 13.5)],
+          layer=pcbnew.B_Cu, width=SIG_W)
+        V("VBUS_HID", 41.2, 13.5)
+        T("VBUS_HID", [(41.2, 13.5), self.pad("D4", "5")], width=SIG_W)
+        T("VBUS_HID", [self.pad("J2", "A4"), (44.0, 16.45)],
+          layer=pcbnew.B_Cu, width=SIG_W)
+        V("VBUS_HID", 44.0, 16.45)
+        T("VBUS_HID", [(44.0, 16.45), self.pad("C7", "1")], width=SIG_W)
+        T(GND, [self.pad("C7", "2"), (45.5, 17.2)], width=SIG_W)
+        V(GND, 45.5, 17.2)
+
         # U2 (CH340N) VCC: drop under the data signals on the back layer
-        V(P5V, 13.0, 6.0)
-        T(P5V, [(13.0, 6.0), (13.0, 18.5)], layer=pcbnew.B_Cu, width=PWR_W)
-        V(P5V, 13.0, 18.5)
-        T(P5V, [(13.0, 18.5), (20.575, 18.5), self.pad("U2", "5")], width=PWR_W)
-        T(P5V, [self.pad("C2", "1"), (17.325, 18.5)], width=SIG_W)
+        V(P5V, 20.0, 6.0)
+        T(P5V, [(20.0, 6.0), (20.0, 18.5)], layer=pcbnew.B_Cu, width=PWR_W)
+        V(P5V, 20.0, 18.5)
+        T(P5V, [(20.0, 18.5), (22.575, 18.5), self.pad("U2", "5")], width=PWR_W)
+        T(P5V, [self.pad("C2", "1"), (14.675, 18.5), (20.0, 18.5)], width=SIG_W)
         # U1 (CH9329) VCC
         T(P5V, [(44.5, 6.0), (44.5, 10.825)], width=PWR_W)
         T(P5V, [(44.5, 10.825), self.pad("U1", "15")], width=PWR_W)
         # decoupling caps + LED
         T(P5V, [(self.pad("C5", "1")[0], 6.0), self.pad("C5", "1")], width=SIG_W)
         T(P5V, [self.pad("R5", "1"), (30.175, 6.0)], width=SIG_W)
-        # ESD clamp rails use each port's local VBUS, with a 100 nF cap
-        T("VBUS_SER", [(9.9, 13.5), (12.0, 13.5)], layer=pcbnew.B_Cu, width=SIG_W)
-        V("VBUS_SER", 12.0, 13.5)
-        T("VBUS_SER", [(12.0, 13.5), self.pad("D3", "5")], width=SIG_W)
-        V("VBUS_SER", 9.0, 16.0)
-        T("VBUS_SER", [(9.0, 16.0), self.pad("C6", "1")], width=SIG_W)
-        T(GND, [self.pad("C6", "2"), (11.825, 17.0)], width=SIG_W)
-        V(GND, 11.825, 17.0)
-
-        T("VBUS_HID", [(52.4, 11.8), (52.4, 11.6)], layer=pcbnew.B_Cu, width=SIG_W)
-        V("VBUS_HID", 52.4, 11.6)
-        T("VBUS_HID", [(52.4, 11.6), (47.0, 11.6)], width=SIG_W)
-        V("VBUS_HID", 47.0, 11.6)
-        T("VBUS_HID", [(47.0, 11.6), (43.5, 11.6), (43.5, 16.0)],
-          layer=pcbnew.B_Cu, width=SIG_W)
-        T("VBUS_HID", [(43.5, 13.5), (44.5, 13.5)], layer=pcbnew.B_Cu, width=SIG_W)
-        V("VBUS_HID", 44.5, 13.5)
-        T("VBUS_HID", [(44.5, 13.5), self.pad("D4", "5")], width=SIG_W)
-        V("VBUS_HID", 43.5, 16.0)
-        T("VBUS_HID", [(43.5, 16.0), self.pad("C7", "1")], width=SIG_W)
-        T(GND, [self.pad("C7", "2"), (46.5, 16.4)], width=SIG_W)
-        V(GND, 46.5, 16.4)
 
 
         # ---------------- serial port USB ----------------
-        T("USB_SER_DP", [self.pad("J1", "A6"), (4.5, 14.25)], width=SIG_W)
-        V("USB_SER_DP", 4.5, 14.25)
-        T("USB_SER_DP", [(4.5, 14.25), (4.5, 12.55), (7.5, 12.55)],
-          layer=pcbnew.B_Cu, width=SIG_W)
-        V("USB_SER_DP", 7.5, 12.55)
-        T("USB_SER_DP", [(7.5, 12.55), self.pad("D3", "1")], width=SIG_W)
-        T("USB_SER_DP", [self.pad("J1", "B6"), (6.5, 13.25), (6.5, 12.55),
+        T("USB_SER_DP", [self.pad("J1", "A6"), (8.9, 13.75)], width=SIG_W)
+        T("USB_SER_DP", [self.pad("J1", "B6"), (8.9, 14.75)], width=SIG_W)
+        T("USB_SER_DP", [(8.9, 13.75), (8.9, 14.75)], width=SIG_W)
+        T("USB_SER_DP", [(8.9, 13.75), (9.0, 13.75), (9.0, 12.55),
                          self.pad("D3", "1")], width=SIG_W)
         T("USB_SER_DP", [self.pad("D3", "1"), self.pad("D3", "6")], width=SIG_W)
-        T("USB_SER_DP", [self.pad("D3", "6"), (14.5, 12.55), (14.5, 12.095),
+        T("USB_SER_DP", [self.pad("D3", "6"), (15.0, 12.55), (15.0, 12.095),
                          self.pad("U2", "1")], width=SIG_W)
-        T("USB_SER_DM", [self.pad("J1", "A7"), (7.0, 13.75), (7.0, 14.45),
-                         self.pad("D3", "3")], width=SIG_W)
-        T("USB_SER_DM", [self.pad("J1", "B7"), (8.0, 14.75), (8.0, 14.45),
-                         self.pad("D3", "3")], width=SIG_W)
+        T("USB_SER_DM", [self.pad("J1", "A7"), (8.4, 14.25)], width=SIG_W)
+        V("USB_SER_DM", 8.4, 14.25, size=0.35, drill=0.15)
+        T("USB_SER_DM", [self.pad("J1", "B7"), (8.4, 13.25)], width=SIG_W)
+        V("USB_SER_DM", 8.4, 13.25, size=0.35, drill=0.15)
+        T("USB_SER_DM", [(8.4, 13.25), (8.4, 14.25)], layer=pcbnew.B_Cu, width=SIG_W)
+        T("USB_SER_DM", [(8.4, 13.25), (9.3, 13.25), (9.3, 14.45),
+                         (10.8, 14.45)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("USB_SER_DM", 10.8, 14.45, size=0.35, drill=0.15)
+        T("USB_SER_DM", [(10.8, 14.45), self.pad("D3", "3")], width=SIG_W)
         T("USB_SER_DM", [self.pad("D3", "3"), self.pad("D3", "4")], width=SIG_W)
-        T("USB_SER_DM", [self.pad("D3", "4"), (13.8, 14.45), (13.8, 13.365),
+        T("USB_SER_DM", [self.pad("D3", "4"), (15.6, 14.45), (15.6, 13.365),
                          self.pad("U2", "2")], width=SIG_W)
 
         # ---------------- HID port USB ----------------
-        T("USB_HID_DP", [self.pad("J2", "A6"), (52.0, 13.75)], width=SIG_W)
-        V("USB_HID_DP", 52.0, 13.75)
-        T("USB_HID_DP", [self.pad("J2", "B6"), (53.0, 14.75)], width=SIG_W)
-        V("USB_HID_DP", 53.0, 14.75)
-        T("USB_HID_DP", [(52.0, 13.75), (52.0, 15.4), (47.0, 15.4)],
-          layer=pcbnew.B_Cu, width=SIG_W)
-        T("USB_HID_DP", [(53.0, 14.75), (53.0, 15.4), (52.0, 15.4)],
-          layer=pcbnew.B_Cu, width=SIG_W)
-        V("USB_HID_DP", 47.0, 15.4)
-        T("USB_HID_DP", [(47.0, 15.4), (46.2, 15.4), (46.2, 14.45),
+        T("USB_HID_DP", [self.pad("J2", "A6"), (47.1, 14.25)], width=SIG_W)
+        T("USB_HID_DP", [self.pad("J2", "B6"), (47.1, 13.25)], width=SIG_W)
+        T("USB_HID_DP", [(47.1, 13.25), (47.1, 14.25)], width=SIG_W)
+        T("USB_HID_DP", [(47.1, 14.25), (47.0, 14.25), (47.0, 14.45),
                          self.pad("D4", "1")], width=SIG_W)
         T("USB_HID_DP", [self.pad("D4", "1"), self.pad("D4", "6")], width=SIG_W)
-        T("USB_HID_DM", [self.pad("J2", "B7"), (51.5, 13.25), (51.5, 12.55),
-                         self.pad("D4", "3")], width=SIG_W)
-        T("USB_HID_DM", [self.pad("J2", "A7"), (47.4, 14.25)], width=SIG_W)
-        V("USB_HID_DM", 47.4, 14.25)
-        T("USB_HID_DM", [(47.4, 14.25), (47.4, 12.55)], layer=pcbnew.B_Cu, width=SIG_W)
-        V("USB_HID_DM", 47.4, 12.55)
-        T("USB_HID_DM", [(47.4, 12.55), self.pad("D4", "3")], width=SIG_W)
-        T("USB_HID_DM", [self.pad("D4", "3"), self.pad("D4", "4")], width=SIG_W)
-        T("USB_HID_DP", [self.pad("D4", "6"), (42.5, 14.45), (42.5, 14.635),
+        T("USB_HID_DP", [self.pad("D4", "6"), (40.5, 14.45), (40.5, 14.635),
                          self.pad("U1", "12")], width=SIG_W)
-        T("USB_HID_DM", [self.pad("D4", "4"), (42.4, 12.55), (42.4, 13.365),
+        T("USB_HID_DM", [self.pad("J2", "A7"), (47.7, 13.75)], width=SIG_W)
+        V("USB_HID_DM", 47.7, 13.75, size=0.35, drill=0.15)
+        T("USB_HID_DM", [self.pad("J2", "B7"), (47.7, 14.75)], width=SIG_W)
+        V("USB_HID_DM", 47.7, 14.75, size=0.35, drill=0.15)
+        T("USB_HID_DM", [(47.7, 13.75), (47.7, 15.5)], layer=pcbnew.B_Cu, width=SIG_W)
+        T("USB_HID_DM", [(47.7, 15.5), (45.0, 15.5), (45.0, 12.55),
+                         (45.2, 12.55)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("USB_HID_DM", 45.2, 12.55, size=0.35, drill=0.15)
+        T("USB_HID_DM", [(45.2, 12.55), self.pad("D4", "3")], width=SIG_W)
+        T("USB_HID_DM", [self.pad("D4", "3"), self.pad("D4", "4")], width=SIG_W)
+        T("USB_HID_DM", [self.pad("D4", "4"), (40.3, 12.55), (40.3, 13.365),
                          self.pad("U1", "13")], width=SIG_W)
 
         # ---------------- CC pulldowns ----------------
-        T("CC1_SER", [self.pad("J1", "A5"), (4.0, 15.25), (4.0, 21.5),
-                      self.pad("R1", "1")], width=SIG_W)
-        T("CC2_SER", [self.pad("J1", "B5"), (4.8, 12.25), (4.8, 8.5),
-                      self.pad("R2", "1")], width=SIG_W)
-        T("CC1_HID", [self.pad("J2", "A5"), (53.5, 12.75)], width=SIG_W)
-        V("CC1_HID", 53.5, 12.75)
-        T("CC1_HID", [(53.5, 12.75), (53.5, 12.22), (48.2, 12.22), (48.2, 7.6)],
-          layer=pcbnew.B_Cu, width=SIG_W)
-        V("CC1_HID", 48.2, 7.6)
-        T("CC1_HID", [(48.2, 7.6), self.pad("R3", "1")], width=SIG_W)
-        T("CC2_HID", [self.pad("J2", "B5"), (52.0, 15.75), (52.0, 23.0),
-                      (48.825, 23.0), (48.825, 21.5)], width=SIG_W)
+        T("CC1_SER", [self.pad("J1", "A5"), (5.2, 12.75), (5.2, 21.0),
+                      (6.175, 21.0), self.pad("R1", "1")], width=SIG_W)
+        T("CC2_SER", [self.pad("J1", "B5"), (9.0, 15.75), (9.0, 15.2),
+                      (10.0, 15.2), (10.0, 13.0)], width=SIG_W)
+        V("CC2_SER", 10.0, 13.0, size=0.35, drill=0.15)
+        T("CC2_SER", [(10.0, 13.0), (10.0, 11.0)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("CC2_SER", 10.0, 11.0, size=0.35, drill=0.15)
+        T("CC2_SER", [(10.0, 11.0), (10.0, 8.5), self.pad("R2", "1")], width=SIG_W)
+        T("CC1_HID", [self.pad("J2", "A5"), (50.6, 15.25), (50.6, 7.6),
+                      (48.2, 7.6), self.pad("R3", "1")], width=SIG_W)
+        T("CC2_HID", [self.pad("J2", "B5"), (46.5, 12.25), (46.5, 13.0)],
+          width=SIG_W)
+        V("CC2_HID", 46.5, 13.0, size=0.35, drill=0.15)
+        T("CC2_HID", [(46.5, 13.0), (46.5, 15.0)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("CC2_HID", 46.5, 15.0, size=0.35, drill=0.15)
+        T("CC2_HID", [(46.5, 15.0), (46.5, 23.0), (48.825, 23.0),
+                      (48.825, 21.5), self.pad("R4", "1")], width=SIG_W)
 
         # ---------------- UART between CH340N and CH9329 ----------------
-        T("UART_9329_TX", [self.pad("U2", "6"), (22.5, 14.635), (22.5, 17.8),
-                           (35.425, 17.8), self.pad("U1", "8")], width=SIG_W)
-        T("UART_9329_RX", [self.pad("U1", "7"), (24.0, 17.175), (24.0, 13.365),
+        T("UART_9329_TX", [self.pad("U2", "6"), (23.5, 14.635), (23.5, 17.8),
+                           (32.0, 17.8), (32.0, 18.445), self.pad("U1", "8")],
+          width=SIG_W)
+        T("UART_9329_RX", [self.pad("U1", "7"), (31.0, 17.175), (31.0, 13.365),
                            self.pad("U2", "7")], width=SIG_W)
 
         # ---------------- LED (cathode crosses the +5V rail on B.Cu) --------
@@ -341,39 +356,32 @@ class Builder:
         V("LED_ACT", 35.825, 5.0)
         T("LED_ACT", [(35.825, 5.0), (35.825, 8.0)], layer=pcbnew.B_Cu, width=SIG_W)
         V("LED_ACT", 35.825, 8.0)
-        T("LED_ACT", [(35.825, 8.0), (35.425, 8.0), (35.425, 9.555)], width=SIG_W)
+        T("LED_ACT", [(35.825, 8.0), (33.425, 8.0), (33.425, 9.555),
+                      self.pad("U1", "1")], width=SIG_W)
 
         # ---------------- V33 / V3 ----------------
-        T("V33", [self.pad("C4", "1"), (40.675, 9.555), self.pad("U1", "16")], width=SIG_W)
-        T("V3_340", [self.pad("C3", "1"), (21.675, 12.095), self.pad("U2", "8")], width=SIG_W)
+        T("V33", [self.pad("C4", "1"), (40.3, 7.0), (40.3, 9.555),
+                  self.pad("U1", "16")], width=SIG_W)
+        T("V3_340", [self.pad("C3", "1"), (23.0, 11.5), (23.0, 12.095),
+                     self.pad("U2", "8")], width=SIG_W)
 
         # ---------------- ground ----------------
-        for x, y in ((42.85, 9.0), (15.675, 17.5),
-                     (24.225, 11.5), (42.325, 7.0), (29.825, 8.0), (7.825, 21.5),
+        for x, y in ((42.85, 9.0),
+                     (26.0, 11.5), (42.325, 7.0), (29.825, 8.0), (7.825, 21.5),
                      (13.825, 8.5), (46.075, 7.6), (47.175, 21.5)):
             V(GND, x, y)
-        T(GND, [self.pad("U1", "14"), (42.0, 12.095)], width=SIG_W)
-        V(GND, 42.0, 12.095)
-        T(GND, [self.pad("U2", "3"), (14.1, 14.635), (14.1, 17.0)], width=SIG_W)
-        V(GND, 14.1, 17.0)
+        T(GND, [self.pad("U1", "14"), (40.0, 12.095)], width=SIG_W)
+        V(GND, 40.0, 12.095)
+        T(GND, [self.pad("U2", "3"), (16.0, 14.635), (16.0, 15.2),
+                (13.5, 15.2), (13.5, 17.0)], width=SIG_W)
+        V(GND, 13.5, 17.0)
         # ESD GND pins
-        T(GND, [self.pad("D3", "2"), (9.2, 13.5)], width=SIG_W)
-        V(GND, 9.2, 13.5)
-        T(GND, [self.pad("D4", "2"), (46.5, 13.5)], width=SIG_W)
-        V(GND, 46.5, 13.5)
-        # connector ground / shield
-        T(GND, [self.pad("J1", "A12"), (1.155, 8.0)], width=SIG_W)
-        V(GND, 1.155, 8.0)
-        T(GND, [self.pad("J1", "A1"), (1.155, 19.5)], width=SIG_W)
-        V(GND, 1.155, 19.5)
-        T(GND, [self.pad("J2", "A1"), (54.845, 8.0)], width=SIG_W)
-        V(GND, 54.845, 8.0)
-        T(GND, [self.pad("J2", "A12"), (54.845, 19.5)], width=SIG_W)
-        V(GND, 54.845, 19.5)
+        # connector ground / shield is handled by the GND pour
 
-        for x, y in ((2.0, 2.0), (54.0, 2.0), (2.0, 25.5), (54.0, 25.5),
+        for x, y in ((10.6, 13.9), (3.0, 12.0), (53.0, 12.0), (3.0, 17.0), (53.0, 17.0),
+                     (2.0, 2.0), (54.0, 2.0), (2.0, 25.5), (54.0, 25.5),
                      (28.0, 25.5), (28.0, 2.0), (10.0, 25.0), (38.0, 25.0),
-                     (50.0, 25.0), (33.0, 10.5), (45.0, 25.0)):
+                     (50.0, 25.0), (32.0, 10.0), (45.0, 25.0)):
             V(GND, x, y)
 
     def finish(self):
