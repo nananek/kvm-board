@@ -8,16 +8,16 @@ cd "$(dirname "$0")/.."
 
 PROJECT=kvm-board
 WIDTH=1800
-# 56 mm wide board -> PIXELS_PER_MM = 1800 / 56
-DPI=$(python3 -c "print(f'{$WIDTH * 25.4 / 56:.4f}')")
+# 65.4 mm wide board -> PIXELS_PER_MM = 1800 / 65.4
+DPI=$(python3 -c "print(f'{$WIDTH * 25.4 / 65.4:.4f}')")
 
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 
 # kicad-cli's PDF export has no page-size option, so make the sheet exactly the
-# board size (56 x 27 mm, see scripts/gen_pcb.py).  The plot then fills the
+# board size (65.4 x 31.4 mm, see scripts/gen_pcb.py).  The plot then fills the
 # page and no drawing sheet is drawn.
-sed 's/(paper "A4")/(paper "User" 56 27)/' "$PROJECT.kicad_pcb" > "$TMP/board.kicad_pcb"
+sed 's/(paper "A4")/(paper "User" 65.4 31.4)/' "$PROJECT.kicad_pcb" > "$TMP/board.kicad_pcb"
 python3 scripts/strip_zones.py "$TMP/board.kicad_pcb" "$TMP/board_routing.kicad_pcb"
 
 plot() {

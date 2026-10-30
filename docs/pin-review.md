@@ -58,12 +58,12 @@ A/B 両面の D+/D- が同じネットに落ちていることを基板側でも
 
 | Pin | 名称 | 接続 |
 | --- | --- | --- |
-| 1, 6 | I/O1 | D+（SER は USB_SER_DP、HID は USB_HID_DP） |
+| 1, 6 | I/O1 | D3: USB_SER_DP / D4: USB_HID_DM |
 | 2 | GND | GND |
-| 3, 4 | I/O2 | D-（SER は USB_SER_DM、HID は USB_HID_DM） |
+| 3, 4 | I/O2 | D3: USB_SER_DM / D4: USB_HID_DP |
 | 5 | VBUS | 各ポートのローカル VBUS（VBUS_SER / VBUS_HID） |
 
-ピン配置は ST のデータシート（1/6 = I/O1、3/4 = I/O2、2 = GND、5 = VBUS）と一致しています。
+ピン配置は ST のデータシート（1/6 = I/O1、3/4 = I/O2、2 = GND、5 = VBUS）と一致しています。D4 は J2 のファンアウトで D+/D- が交差しないように、I/O1 を D-、I/O2 を D+ に割り当てています（USBLC6 の 2 チャネルは電気的に同一です）。
 
 **修正した点**: VBUS ピンをダイオード OR 後の共通 +5V から、各ポートのローカル VBUS（ダイオードの前）に変更しました。データシートの推奨どおり、ESD 電流をそのポートの VBUS と GND に逃がします。あわせて USBLC6 の近くに 100nF（C6 / C7）を追加しました。データシートにも「VBUS-GND 間に 100nF を USBLC6 の近くに置く」とあります。
 
