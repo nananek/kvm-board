@@ -44,6 +44,8 @@ PLACE = {
     "C3": ("C_0603_1608Metric", 23.4, 11.5, 0),
     "C4": ("C_0603_1608Metric", 41.5, 7.0, 0),
     "C5": ("C_0805_2012Metric", 29.0, 8.0, 0),
+    "C6": ("C_0603_1608Metric", 11.0, 16.2, 0),
+    "C7": ("C_0603_1608Metric", 45.0, 16.4, 0),
 }
 
 SIG_W = 0.2
@@ -219,20 +221,33 @@ class Builder:
         T(P5V, [(13.0, 18.5), (20.575, 18.5), self.pad("U2", "5")], width=PWR_W)
         T(P5V, [self.pad("C2", "1"), (17.325, 18.5)], width=SIG_W)
         # U1 (CH9329) VCC
-        T(P5V, [(44.5, 6.0), (44.5, 11.5)], width=PWR_W)
+        T(P5V, [(44.5, 6.0), (44.5, 10.825)], width=PWR_W)
         T(P5V, [(44.5, 10.825), self.pad("U1", "15")], width=PWR_W)
         # decoupling caps + LED
         T(P5V, [(self.pad("C5", "1")[0], 6.0), self.pad("C5", "1")], width=SIG_W)
         T(P5V, [self.pad("R5", "1"), (30.175, 6.0)], width=SIG_W)
-        # ESD clamp rails (USBLC6 VBUS pin) sit on the local +5V rail
-        T(P5V, [(13.0, 14.5), (11.8, 14.5), (11.8, 13.5)],
+        # ESD clamp rails use each port's local VBUS, with a 100 nF cap
+        T("VBUS_SER", [(9.9, 13.5), (12.0, 13.5)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("VBUS_SER", 12.0, 13.5)
+        T("VBUS_SER", [(12.0, 13.5), self.pad("D3", "5")], width=SIG_W)
+        V("VBUS_SER", 9.0, 16.0)
+        T("VBUS_SER", [(9.0, 16.0), self.pad("C6", "1")], width=SIG_W)
+        T(GND, [self.pad("C6", "2"), (11.825, 17.0)], width=SIG_W)
+        V(GND, 11.825, 17.0)
+
+        T("VBUS_HID", [(52.4, 11.8), (52.4, 11.6)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("VBUS_HID", 52.4, 11.6)
+        T("VBUS_HID", [(52.4, 11.6), (47.0, 11.6)], width=SIG_W)
+        V("VBUS_HID", 47.0, 11.6)
+        T("VBUS_HID", [(47.0, 11.6), (43.5, 11.6), (43.5, 16.0)],
           layer=pcbnew.B_Cu, width=SIG_W)
-        V(P5V, 11.8, 13.5)
-        T(P5V, [(11.8, 13.5), self.pad("D3", "5")], width=SIG_W)
-        V(P5V, 44.5, 11.5)
-        T(P5V, [(44.5, 11.5), (44.5, 13.5)], layer=pcbnew.B_Cu, width=SIG_W)
-        V(P5V, 44.5, 13.5)
-        T(P5V, [(44.5, 13.5), self.pad("D4", "5")], width=SIG_W)
+        T("VBUS_HID", [(43.5, 13.5), (44.5, 13.5)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("VBUS_HID", 44.5, 13.5)
+        T("VBUS_HID", [(44.5, 13.5), self.pad("D4", "5")], width=SIG_W)
+        V("VBUS_HID", 43.5, 16.0)
+        T("VBUS_HID", [(43.5, 16.0), self.pad("C7", "1")], width=SIG_W)
+        T(GND, [self.pad("C7", "2"), (46.5, 16.4)], width=SIG_W)
+        V(GND, 46.5, 16.4)
 
 
         # ---------------- serial port USB ----------------

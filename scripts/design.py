@@ -147,12 +147,12 @@ p = [
          fp="KVM:SOT-23-6", lcsc="C7519",
          pins={"1": "USB_SER_DP", "6": "USB_SER_DP",
                "3": "USB_SER_DM", "4": "USB_SER_DM",
-               "2": GND, "5": P5V}),
+               "2": GND, "5": "VBUS_SER"}),
     dict(ref="D4", value="USBLC6-2SC6", sym="USBLC6",
          fp="KVM:SOT-23-6", lcsc="C7519",
          pins={"1": "USB_HID_DP", "6": "USB_HID_DP",
                "3": "USB_HID_DM", "4": "USB_HID_DM",
-               "2": GND, "5": P5V}),
+               "2": GND, "5": "VBUS_HID"}),
     dict(ref="R1", value="5.1k", sym="R", fp="KVM:R_0603_1608Metric", lcsc="C23186",
          pins={"1": "CC1_SER", "2": GND}),
     dict(ref="R2", value="5.1k", sym="R", fp="KVM:R_0603_1608Metric", lcsc="C23186",
@@ -175,6 +175,10 @@ p = [
          pins={"1": "V33", "2": GND}),
     dict(ref="C5", value="10uF", sym="C", fp="KVM:C_0805_2012Metric", lcsc="C15850",
          pins={"1": P5V, "2": GND}),
+    dict(ref="C6", value="100nF", sym="C", fp="KVM:C_0603_1608Metric", lcsc="C14663",
+         pins={"1": "VBUS_SER", "2": GND}),
+    dict(ref="C7", value="100nF", sym="C", fp="KVM:C_0603_1608Metric", lcsc="C14663",
+         pins={"1": "VBUS_HID", "2": GND}),
 ]
 PARTS = p
 
