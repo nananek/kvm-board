@@ -1,6 +1,7 @@
 """Create JLCPCB-format BOM / CPL from design.py and the KiCad placement file."""
 
 import csv
+import math
 import os
 import sys
 from collections import OrderedDict
@@ -14,8 +15,16 @@ FAB = os.path.join(ROOT, "fab")
 # JLCPCB places parts using the orientation of the part in their own library.
 # These offsets align KiCad footprints with the JLC library. The SOT-23-6
 # offset includes a further 90-degree counterclockwise placement adjustment.
+#
+# The USB-C receptacle needs no rotation offset.  Its board footprint was
+# turned 180 degrees so the mouth is at the board edge and the SMT pads sit at
+# the rear, matching the JLC part.  The board origin moved with the pads, so
+# the CPL position is shifted back by 1.571 mm to keep the JLC origin at the
+# same place (J1 5.2 mm, J2 50.8 mm).
+USB_C_FOOTPRINT = "USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+USB_C_POSITION_OFFSET = 1.571
+
 ROTATION_OFFSETS = (
-    ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 180),
     ("SO-16_3.9x9.9mm_P1.27mm", 270),
     ("SO-8_3.9x4.9mm_P1.27mm", 270),
     ("SOT-23-6", 270),
@@ -27,6 +36,14 @@ def rotation_offset(footprint):
         if footprint == prefix:
             return offset
     return 0
+
+
+def position_offset(footprint, rotation):
+    if footprint != USB_C_FOOTPRINT:
+        return 0.0, 0.0
+    rad = math.radians(rotation)
+    return (-USB_C_POSITION_OFFSET * math.sin(rad),
+            USB_C_POSITION_OFFSET * math.cos(rad))
 
 
 def clean_fp(fp):
@@ -57,10 +74,12 @@ def write_cpl():
         for row in r:
             # pos export uses the drill/place origin (bottom-left), so Y is
             # already 0..27 with the same origin as the gerbers
-            y = float(row["PosY"])
-            rot = (float(row["Rot"]) + rotation_offset(row["Package"])) % 360.0
-            w.writerow([row["Ref"], f"{float(row['PosX']):.4f}",
-                        f"{y:.4f}", "Top", f"{rot:.1f}"])
+            kicad_rot = float(row["Rot"])
+            rot = (kicad_rot + rotation_offset(row["Package"])) % 360.0
+            dx, dy = position_offset(row["Package"], kicad_rot)
+            x = float(row["PosX"]) + dx
+            y = float(row["PosY"]) + dy
+            w.writerow([row["Ref"], f"{x:.4f}", f"{y:.4f}", "Top", f"{rot:.1f}"])
     print("wrote", out)
 
 
