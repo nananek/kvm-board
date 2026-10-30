@@ -151,7 +151,7 @@ class Builder:
                         bb = g.GetBoundingBox()
                         x0 = pcbnew.ToMM(bb.GetX())
                         x1 = x0 + pcbnew.ToMM(bb.GetWidth())
-                        if x0 < 1.0 or x1 > 55.0:
+                        if x0 < 1.0 or x1 > W - 1.0:
                             g.SetLayer(pcbnew.F_Fab)
             for pad in fp.Pads():
                 num = pad.GetNumber()
