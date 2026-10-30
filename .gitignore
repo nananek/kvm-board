@@ -3,3 +3,4 @@ __pycache__/
 *.kicad_prl.lock
 fp-info-cache
 .DS_Store
+.tmp/
