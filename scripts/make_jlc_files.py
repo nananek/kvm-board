@@ -10,7 +10,6 @@ from design import PARTS  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FAB = os.path.join(ROOT, "fab")
-BOARD_H = 27.0
 
 # JLCPCB places parts using the orientation of the part in their own library.
 # These are the offsets between the KiCad footprint and the JLC library, from
@@ -56,7 +55,9 @@ def write_cpl():
         w = csv.writer(fo)
         w.writerow(["Designator", "Mid X", "Mid Y", "Layer", "Rotation"])
         for row in r:
-            y = BOARD_H + float(row["PosY"])  # KiCad Y is negative = up
+            # pos export uses the drill/place origin (bottom-left), so Y is
+            # already 0..27 with the same origin as the gerbers
+            y = float(row["PosY"])
             rot = (float(row["Rot"]) + rotation_offset(row["Package"])) % 360.0
             w.writerow([row["Ref"], f"{float(row['PosX']):.4f}",
                         f"{y:.4f}", "Top", f"{rot:.1f}"])

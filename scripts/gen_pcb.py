@@ -61,6 +61,9 @@ class Builder:
         self.board = pcbnew.BOARD()
         self.board.GetDesignSettings().SetBoardThickness(pcbnew.FromMM(THICKNESS))
         self.board.GetDesignSettings().m_CopperEdgeClearance = pcbnew.FromMM(0.2)
+        # drill/place origin at the bottom-left corner, so the gerbers and the
+        # JLCPCB CPL share the same coordinate system
+        self.board.GetDesignSettings().SetAuxOrigin(P(0, H))
         self.nets = {}
         self.pads = {}
         self._add_nets()
