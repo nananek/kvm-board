@@ -53,6 +53,8 @@ PLACE = {
     "C5": ("C_0805_2012Metric", 29.0, 8.0, 0),
     "C6": ("C_0603_1608Metric", 11.0, 16.2, 0),
     "C7": ("C_0603_1608Metric", 55.0, 11.5, 0),
+    "TP1": ("TestPoint_1P", 42.0, 17.0, 0),
+    "TP2": ("TestPoint_1P", 44.54, 17.0, 0),
 }
 
 SIG_W = 0.2
@@ -253,6 +255,56 @@ class Builder:
         text("A1", 61.6, 11.0, 0.8)
         text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
         text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
+        # SET / GND test pads to the right of U1 (TP1 / TP2)
+        text("SET", 42.0, 15.35, 0.8, 0.1)
+        text("GND", 44.54, 15.35, 0.8, 0.1)
+        text("SHORT TO CONFIGURE", 44.5, 20.2, 0.8, 0.1)
+
+    def qr_code(self):
+        """Draw the repository QR code on the bottom silkscreen.
+
+        The text file holds the QR as seen from the bottom (1 = dark module).
+        Board coordinates are mirrored horizontally so the code reads the right
+        way round when the finished board is turned over.
+        """
+        path = os.path.join(ROOT, "scripts", "repo_qr.txt")
+        rows = []
+        with open(path) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                rows.append(line)
+        n = len(rows)
+        if n == 0 or any(len(row) != n for row in rows):
+            raise RuntimeError("repo_qr.txt is not a square matrix")
+
+        cell = 0.5
+        x0 = 20.5
+        y0 = 11.75
+        for r, row in enumerate(rows):
+            c = 0
+            while c < n:
+                if row[c] != "0":
+                    c += 1
+                    continue
+                c_end = c
+                while c_end < n and row[c_end] == "0":
+                    c_end += 1
+                # mirror the run: bottom-view column c maps to board column n-1-c
+                xa = x0 + (n - c_end) * cell
+                xb = x0 + (n - c) * cell
+                ya = y0 + r * cell
+                yb = y0 + (r + 1) * cell
+                rect = pcbnew.PCB_SHAPE(self.board)
+                rect.SetShape(pcbnew.SHAPE_T_RECT)
+                rect.SetStart(P(xa, ya))
+                rect.SetEnd(P(xb, yb))
+                rect.SetLayer(pcbnew.B_SilkS)
+                rect.SetWidth(pcbnew.FromMM(0.05))
+                rect.SetFilled(True)
+                self.board.Add(rect)
+                c = c_end
 
     # -- routing -------------------------------------------------------
     def route(self):
@@ -435,6 +487,10 @@ class Builder:
         T("V3_340", [self.pad("C3", "1"), (23.0, 11.5), (23.0, 12.095),
                      self.pad("U2", "8")], width=SIG_W)
 
+        # ---------------- SET test pad (TP1) ----------------
+        T("SET", [self.pad("U1", "11"), (41.0, 17.0), self.pad("TP1", "1")],
+          width=SIG_W)
+
         # ---------------- ground ----------------
         for x, y in ((42.85, 9.0),
                      (26.0, 11.5), (42.325, 7.0), (29.825, 8.0), (7.825, 21.5),
@@ -450,7 +506,7 @@ class Builder:
 
         for x, y in ((10.6, 13.9), (3.0, 12.0), (53.0, 12.0), (3.0, 17.0), (53.0, 17.0),
                      (2.0, 2.0), (53.0, 2.0), (2.0, 25.5), (54.0, 25.5),
-                     (28.0, 25.5), (28.0, 2.0), (10.0, 25.0), (38.0, 25.0),
+                     (16.0, 25.5), (28.0, 2.0), (10.0, 25.0), (42.0, 25.0),
                      (50.0, 25.0), (32.0, 10.0), (45.0, 25.0)):
             V(GND, x, y)
 
@@ -485,6 +541,7 @@ def main():
     b.outline()
     b.zones()
     b.texts()
+    b.qr_code()
     b.route()
     b.finish()
     print("wrote", os.path.join(ROOT, f"{PROJECT}.kicad_pcb"))
