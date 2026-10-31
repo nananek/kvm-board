@@ -6,7 +6,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-PROJECT=kvm-board
+PROJECT=serial-km-emulator
 WIDTH=1800
 # 57.6 mm wide board -> PIXELS_PER_MM = 1800 / 57.6
 DPI=$(python3 -c "print(f'{$WIDTH * 25.4 / 57.6:.4f}')")

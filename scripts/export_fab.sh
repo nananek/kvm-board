@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-PROJECT=kvm-board
+PROJECT=serial-km-emulator
 FAB=fab
 rm -rf "$FAB"
 mkdir -p "$FAB/gerbers"

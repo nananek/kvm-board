@@ -31,7 +31,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "kvm-board.kicad_pro",
+    "filename": "serial-km-emulator.kicad_pro",
     "version": 1
   },
   "net_settings": {

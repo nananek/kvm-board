@@ -1,12 +1,12 @@
 %TF.GenerationSoftware,KiCad,Pcbnew,10.0.7*%
-%TF.CreationDate,2026-10-31T13:15:26+00:00*%
-%TF.ProjectId,kvm-board,6b766d2d-626f-4617-9264-2e6b69636164,rev?*%
+%TF.CreationDate,2026-10-31T23:30:23+09:00*%
+%TF.ProjectId,serial-km-emulator,73657269-616c-42d6-9b6d-2d656d756c61,rev?*%
 %TF.SameCoordinates,Original*%
 %TF.FileFunction,Soldermask,Top*%
 %TF.FilePolarity,Negative*%
 %FSLAX46Y46*%
 G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
-G04 Created by KiCad (PCBNEW 10.0.7) date 2026-10-31 13:15:26*
+G04 Created by KiCad (PCBNEW 10.0.7) date 2026-10-31 23:30:23*
 %MOMM*%
 %LPD*%
 G01*
