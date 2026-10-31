@@ -239,9 +239,9 @@ def main():
         "   about 1 mm spacer under the board.",
     ]
     for i, line in enumerate(lines):
-        s.text(line, nx, ny - 6.5 - i * 4.6, 2.9)
+        s.text(line, nx, ny - 6.5 - i * 4.3, 2.9)
 
-    s.text("DIMENSIONS (mm)", nx, 105.0, 3.4)
+    s.text("DIMENSIONS (mm)", nx, 99.0, 3.4)
     for i, line in enumerate([
         "board          65.4 x 31.4 x 1.6",
         "case tray      66.4 x 32.4",
@@ -251,7 +251,7 @@ def main():
         "mouth          J1 1.5 / J2 1.4 mm past the edge",
         "notch          6.8 x 19.8, lower-right",
     ]):
-        s.text(line, nx, 99.0 - i * 5.2, 2.9)
+        s.text(line, nx, 94.0 - i * 4.6, 2.9)
 
     # --- 100 mm scale check ---------------------------------------------
     sx, sy, slen = BX, 66.0, 100.0
