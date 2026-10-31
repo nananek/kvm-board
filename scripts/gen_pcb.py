@@ -5,9 +5,10 @@ Layout summary
 Board 66.0 x 31.4 mm, shaped to the measured FRISK case
 (67.0 x 32.4 mm inner tray, 1.0 mm wall, with a latch island in one corner).
 J1 = serial (CH340N) Type-C on the left short edge, J2 = HID (CH9329)
-Type-C on the right short edge.  Both connector mouths overhang the board
-edge by 1.5 mm: the board sits 0.5 mm from the inner wall, so the mouths are
-flush with the 1.0 mm-thick case wall and a plug can reach them.
+Type-C on the right short edge.  J1 overhangs the board edge by 1.5 mm;
+J2 overhangs by 1.28 mm after it is nudged in to clear the latch notch.  The
+board sits 0.5 mm from the inner wall, so the mouths are close to flush with
+the 1.0 mm-thick case wall and a plug can reach them.
 Both connectors are sinks (5.1k CC pulldowns).
 +5V is diode-OR'ed from both VBUS pins and distributed on the top layer.
 GND is a copper pour on both layers.
@@ -28,15 +29,18 @@ FP_DIR = os.path.join(ROOT, "lib", "KVM.pretty")
 W, H = 66.0, 31.4
 # Latch-island notch in the lower-right corner.  The measured case leaves an
 # 11.0 mm-high opening above the island (where J2 sits) and the island is
-# 8.4 mm deep, so the board is cut back by the same values.
+# 8.4 mm deep.  Take the usual 0.5 mm clearance off the opening height so the
+# board's upper-right lobe is 10.5 mm wide (the notch starts 10.5 mm down).
 NOTCH_X = W - 8.4
-NOTCH_Y = 11.0
+NOTCH_Y = 10.5
 THICKNESS = 1.6
 
 # reference -> (footprint name, x, y, rotation)
+# J2 is nudged 0.16 mm left / 0.22 mm up from the 5.7 mm centre line so its
+# shell pads keep the 0.2 mm edge clearance inside the narrowed lobe.
 PLACE = {
     "J1": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 2.129, 15.7, 270),
-    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 63.79, 5.7, 90),
+    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 63.63, 5.48, 90),
     "U2": ("SO-8_3.9x4.9mm_P1.27mm", 19.5, 14.0, 0),
     "U1": ("SO-16_3.9x9.9mm_P1.27mm", 36.5, 14.0, 0),
     "D1": ("D_SOD-323", 11.0, 6.0, 180),
@@ -256,7 +260,7 @@ class Builder:
         # rotated 90 deg (A1 pad at the bottom edge).  J2 sits in the
         # upper-right lobe of the case, above the latch notch.
         text("A1", 3.5, 10.0, 0.8)
-        text("A1", 58.6, 9.9, 0.8)
+        text("A1", 58.44, 9.68, 0.8)
         text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
         text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
         # SET / GND test pads to the right of U1 (TP1 / TP2)

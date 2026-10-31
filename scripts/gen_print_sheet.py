@@ -29,8 +29,8 @@ BOARD_W, BOARD_H = 66.0, 31.4
 CASE_CLEARANCE = 0.5
 
 # Connector centres in board coordinates (y from the top edge).
-J1_Y, J2_Y = 15.7, 5.7
-J1_X, J2_X = 2.129, 63.79
+J1_Y, J2_Y = 15.7, 5.48
+J1_X, J2_X = 2.129, 63.63
 SHELL_X, SHELL_Y = 8.94, 7.3  # footprint body before rotation (x, y)
 
 
@@ -241,9 +241,10 @@ def main():
     # --- dimensions ------------------------------------------------------
     dim_h(s, BX, BX + BOARD_W, BY - 9, "66.0")
     dim_v(s, BX - 8, BY, BY + BOARD_H, "31.4")
-    dim_v(s, BX + BOARD_W + 4, BY, BY + BOARD_H - 11.0, "20.4")
+    dim_v(s, BX + BOARD_W + 4, BY, BY + BOARD_H - 10.5, "20.9")
+    dim_v(s, BX + BOARD_W + 4, BY + BOARD_H - 10.5, BY + BOARD_H, "10.5")
     dim_v(s, BX + BOARD_W + 11, BY + BOARD_H - J1_Y, BY + BOARD_H, "15.7")
-    dim_v(s, BX + BOARD_W + 18, BY + BOARD_H - J2_Y, BY + BOARD_H, "5.7")
+    dim_v(s, BX + BOARD_W + 18, BY + BOARD_H - J2_Y, BY + BOARD_H, "5.48")
 
     # --- legend ----------------------------------------------------------
     ly = 92.0
@@ -266,11 +267,11 @@ def main():
         "3. Cut out the solid grey board and drop it into the tray.",
         "4. The light grey band is the 0.5 mm clearance to the",
         "   case wall: board 66.0 x 31.4, case inner 67.0 x 32.4.",
-        "5. The notch (8.4 x 20.4 mm) must clear the latch",
-        "   island in the lower-right corner of the tray.",
-        "6. J1 (left) and J2 (right) mouths sit 1.5 mm past the",
-        "   board edge. The board is 0.5 mm from the 1.0 mm wall,",
-        "   so the mouths are flush with the outer surface.",
+        "5. The notch (8.4 x 20.9 mm) must clear the latch",
+        "   island; the 10.5 mm lobe leaves 0.5 mm clearance.",
+        "6. J1 (left) and J2 (right) mouths sit 1.5 / 1.28 mm past",
+        "   the board edge. J1 is flush with the outer wall; J2 is",
+        "   about 0.2 mm inside it.",
         "7. Cut 10 x 4 mm openings through the whole wall, 1.4 to",
         "   5.1 mm above the tray floor. Chamfer the outside by",
         "   about 0.3 mm, and centre the board in the tray.",
@@ -285,9 +286,10 @@ def main():
         "board          66.0 x 31.4 x 1.6",
         "case           67.0 x 32.4 inner, 1.0 wall",
         "wall gap       0.5 all round",
-        "J1 / J2 centre 15.7 / 5.7 from the top edge",
-        "mouth          J1 1.5 / J2 1.44 past the edge",
-        "notch          8.4 x 20.4, lower-right",
+        "J1 / J2 centre 15.7 / 5.48 from the top edge",
+        "mouth          J1 1.5 / J2 1.28 past the edge",
+        "notch          8.4 x 20.9, lower-right",
+        "upper-right lobe 10.5 mm wide",
     ]):
         s.text(line, nx, 94.0 - i * 5.2, 2.9)
 
