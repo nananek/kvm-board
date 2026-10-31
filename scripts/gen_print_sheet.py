@@ -32,7 +32,7 @@ LATCH_DEPTH = 8.4
 
 # Connector centres in board coordinates (y from the top edge).  Both are on
 # the left edge, stacked around the board centre line.
-J1_Y, J2_Y = 9.7, 21.7
+J1_Y, J2_Y = 10.7, 20.7
 J1_X = J2_X = 2.129
 SHELL_X, SHELL_Y = 8.94, 7.3  # footprint body before rotation (x, y)
 
@@ -256,8 +256,8 @@ def main():
     dim_h(s, BX, BX + BOARD_W, BY - 9, "57.6")
     dim_h(s, cx0, cx0 + CASE_W, BY - 15, "67.0 case inner")
     dim_v(s, BX - 8, BY, BY + BOARD_H, "31.4")
-    dim_v(s, BX + BOARD_W + 11, BY + BOARD_H - J1_Y, BY + BOARD_H, "9.7")
-    dim_v(s, BX + BOARD_W + 18, BY + BOARD_H - J2_Y, BY + BOARD_H, "21.7")
+    dim_v(s, BX + BOARD_W + 11, BY + BOARD_H - J1_Y, BY + BOARD_H, "10.7")
+    dim_v(s, BX + BOARD_W + 18, BY + BOARD_H - J2_Y, BY + BOARD_H, "20.7")
 
     # --- legend ----------------------------------------------------------
     ly = 92.0
@@ -286,12 +286,13 @@ def main():
         "   bottom walls.",
         "5. The right edge is one straight cut, 0.5 mm from the",
         "   latch island. The right 8.9 mm of the tray stays empty.",
-        "6. Both Type-C mouths are on the left edge at 9.7 and",
-        "   21.7 mm from the top (6.0 mm either side of centre).",
+        "6. Both Type-C mouths are on the left edge at 10.7 and",
+        "   20.7 mm from the top (5.0 mm either side of centre).",
         "   Each mouth overhangs the edge by 1.5 mm.",
-        "7. Cut two 10 x 4 mm openings through the left wall,",
-        "   centred on the two dashed centre lines. Chamfer the",
-        "   outside by about 0.3 mm.",
+        "7. Cut one 20 x 4 mm opening through the tray wall,",
+        "   centred between the two dashed centre lines. Both",
+        "   ports sit inside the lid notch, so the lid is not cut.",
+        "   Chamfer the outside by about 0.3 mm.",
         "8. There are no mounting holes: use tape or foam, with",
         "   about 1 mm spacer under the board.",
     ]
@@ -304,8 +305,8 @@ def main():
         "case           67.0 x 32.4 inner, 1.0 wall",
         "left/top/bottom gap 0.5",
         "right edge     0.5 from the latch island",
-        "J1 / J2 centre 9.7 / 21.7 from the top",
-        "connector pitch 12.0 (6.0 each side of centre)",
+        "J1 / J2 centre 10.7 / 20.7 from the top",
+        "connector pitch 10.0 (5.0 each side of centre)",
         "mouth          1.5 past the left edge",
     ]):
         s.text(line, nx, 94.0 - i * 5.2, 2.9)
