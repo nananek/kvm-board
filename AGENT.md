@@ -54,7 +54,7 @@ rootless Docker などで `/work` がコンテナ内で root 所有になる場�
 
 `scripts/gen_docs_images.sh` は `kicad-cli pcb export pdf` でレイヤーを書き出し、Ghostscript で PNG にしています。
 
-- ページサイズは基板に合わせて `User 65.4 31.4` に差し替えています（PDF 出力にはページサイズの指定がないため）
+- ページサイズは基板に合わせて `User 66.0 31.4` に差し替えています（PDF 出力にはページサイズの指定がないため）
 - トップ: `F.Cu,F.SilkS,Edge.Cuts`
 - ボトム: `B.Cu,B.SilkS,Edge.Cuts` を `--mirror`
 - 配線図: `F.Cu,B.Cu,F.SilkS,Edge.Cuts`。GND ベタを見せないため、ゾーンを消した一時コピーを使います
