@@ -3,7 +3,7 @@
 #
 # Examples:
 #   ./scripts/kicad.sh ./scripts/export_fab.sh
-#   ./scripts/kicad.sh kicad-cli pcb drc --severity-all kvm-board.kicad_pcb
+#   ./scripts/kicad.sh kicad-cli pcb drc --severity-all serial-km-emulator.kicad_pcb
 #
 # Override the image with KICAD_IMAGE (default: kicad/kicad:10.0).  If the
 # current user cannot write to /work inside the container (rootless Docker

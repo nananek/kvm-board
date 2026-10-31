@@ -1,4 +1,4 @@
-"""Generate kvm-board.kicad_sch (KiCad 8/9/10 compatible S-expression)."""
+"""Generate serial-km-emulator.kicad_sch (KiCad 8/9/10 compatible S-expression)."""
 
 import os
 import sys

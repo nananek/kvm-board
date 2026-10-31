@@ -5,12 +5,12 @@
       "Application": "Pcbnew",
       "Version": "10.0.7"
     },
-    "CreationDate": "2026-10-31T13:15:26+00:00"
+    "CreationDate": "2026-10-31T23:30:23+09:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
-      "Name": "kvm-board",
-      "GUID": "6b766d2d-626f-4617-9264-2e6b69636164",
+      "Name": "serial-km-emulator",
+      "GUID": "73657269-616c-42d6-9b6d-2d656d756c61",
       "Revision": "rev?"
     },
     "Size": {
@@ -34,47 +34,47 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "kvm-board-F_Cu.gtl",
+      "Path": "serial-km-emulator-F_Cu.gtl",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "kvm-board-B_Cu.gbl",
+      "Path": "serial-km-emulator-B_Cu.gbl",
       "FileFunction": "Copper,L2,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "kvm-board-F_Paste.gtp",
+      "Path": "serial-km-emulator-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "kvm-board-B_Paste.gbp",
+      "Path": "serial-km-emulator-B_Paste.gbp",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "kvm-board-F_Silkscreen.gto",
+      "Path": "serial-km-emulator-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "kvm-board-B_Silkscreen.gbo",
+      "Path": "serial-km-emulator-B_Silkscreen.gbo",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "kvm-board-F_Mask.gts",
+      "Path": "serial-km-emulator-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "kvm-board-B_Mask.gbs",
+      "Path": "serial-km-emulator-B_Mask.gbs",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "kvm-board-Edge_Cuts.gm1",
+      "Path": "serial-km-emulator-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     }

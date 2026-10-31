@@ -1,4 +1,4 @@
-"""Generate the kvm-board PCB with pcbnew (KiCad 10 python API).
+"""Generate the serial-km-emulator PCB with pcbnew (KiCad 10 python API).
 
 Layout summary
 --------------
@@ -237,7 +237,8 @@ class Builder:
 
         text("SERIAL / CH340", 15.5, 19.5, 0.9)
         text("HID / CH9329", 14.0, 30.0, 1.0)
-        text("KVM-BOARD  CH9329EMU-USB replacement", 28.8, 2.4, 0.9, 0.13)
+        # 0.85 mm at x = 29.3 keeps the longer name clear of R1 at the left.
+        text("SERIAL-KM-EMULATOR  CH9329EMU-USB replacement", 29.3, 2.4, 0.85, 0.13)
         # pin-1 / polarity marks for datasheet comparison
         text("1", 32.2, 8.2, 0.8)
         text("1", 14.0, 10.6, 0.8)
@@ -278,7 +279,9 @@ class Builder:
 
         cell = 0.5
         x0 = 20.5
-        y0 = 11.75
+        # 41x41 modules at 0.5 mm.  Keep the code's centre at y = 21.0 (as in
+        # the previous 37x37 code); the bottom edge is 0.15 mm inside the board.
+        y0 = 10.75
         for r, row in enumerate(rows):
             c = 0
             while c < n:

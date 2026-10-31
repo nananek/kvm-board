@@ -1,6 +1,6 @@
 # ピン単位レビュー
 
-`kvm-board.kicad_sch` のネットリストと `kvm-board.kicad_pcb` のパッドネットを直接突き合わせた結果です。ERC と DRC はどちらも 0 件、回路図と基板のネットは一致しています。
+`serial-km-emulator.kicad_sch` のネットリストと `serial-km-emulator.kicad_pcb` のパッドネットを直接突き合わせた結果です。ERC と DRC はどちらも 0 件、回路図と基板のネットは一致しています。
 
 ## USB Type-C（J1 / J2）
 

@@ -14,7 +14,7 @@ rootless Docker などで `/work` がコンテナ内で root 所有になる場�
 ```sh
 ./scripts/kicad.sh ./scripts/export_fab.sh
 ./scripts/kicad.sh ./scripts/gen_docs_images.sh
-./scripts/kicad.sh kicad-cli pcb drc --severity-all kvm-board.kicad_pcb
+./scripts/kicad.sh kicad-cli pcb drc --severity-all serial-km-emulator.kicad_pcb
 ```
 
 ## 生成物
@@ -29,15 +29,15 @@ rootless Docker などで `/work` がコンテナ内で root 所有になる場�
 | リポジトリ QR（URL 変更時のみ） | `python3 scripts/make_repo_qr.py`（`qrcode` が必要） |
 
 `scripts/gen_pcb.py` で基板を作り直すと UUID が総入れ替えになり、差分が大きくなります。
-シルクの座標を動かすだけのような変更では、生成スクリプトと `kvm-board.kicad_pcb` の両方に同じ値を入れて、必要なファイルだけを再生成してください。
+シルクの座標を動かすだけのような変更では、生成スクリプトと `serial-km-emulator.kicad_pcb` の両方に同じ値を入れて、必要なファイルだけを再生成してください。
 
 基板裏面の QR コードは `scripts/repo_qr.txt` を読み込んで描きます。URL を変えたときだけ `scripts/make_repo_qr.py` で作り直してください。テストパッド TP1/TP2 は実装しない部品なので、BOM と CPL には入りません。
 
 ## 検証
 
 ```sh
-./scripts/kicad.sh kicad-cli pcb drc --severity-all kvm-board.kicad_pcb
-./scripts/kicad.sh kicad-cli sch erc --severity-all kvm-board.kicad_sch
+./scripts/kicad.sh kicad-cli pcb drc --severity-all serial-km-emulator.kicad_pcb
+./scripts/kicad.sh kicad-cli sch erc --severity-all serial-km-emulator.kicad_sch
 ```
 
 どちらも 0 件を保ってください。

@@ -4,8 +4,8 @@ Both the schematic and the PCB generator import this module, so the netlist
 is guaranteed to be identical between the two.
 """
 
-PROJECT = "kvm-board"
-REPO_URL = "https://github.com/nananek/kvm-board"
+PROJECT = "serial-km-emulator"
+REPO_URL = "https://github.com/nananek/serial-km-emulator"
 
 # ---------------------------------------------------------------------------
 # Symbols (library coordinates: +Y is up, as in .kicad_sym files)

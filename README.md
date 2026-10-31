@@ -1,4 +1,4 @@
-# kvm-board — CH9329 USB キーボード/マウスエミュレータ
+# serial-km-emulator — CH9329 USB キーボード/マウスエミュレータ
 
 MR-CH9329EMU-USB（マルツの CH9329 モジュール）の代替を JLCPCB の SMT 実装で作るための KiCad プロジェクトです。シリアル側とキーボード/マウス側の両方を USB Type-C にしています。
 
@@ -28,7 +28,7 @@ MR-CH9329EMU-USB（マルツの CH9329 モジュール）の代替を JLCPCB の
 
 J1/J2 はどちらもデバイス側（CC に 5.1k の Rd）です。ホスト PC とは C-to-C でも C-to-A でも接続できます。充電器は接続しないでください。
 
-基板裏面にはリポジトリ（<https://github.com/nananek/kvm-board>）の QR コードをシルクで入れています。ケースに組み込む前ならスマートフォンで読み取れます。
+基板裏面にはリポジトリ（<https://github.com/nananek/serial-km-emulator>）の QR コードをシルクで入れています。ケースに組み込む前ならスマートフォンで読み取れます。
 
 ![基板裏面](docs/pcb_bottom.png)
 
@@ -87,7 +87,7 @@ U1 の右側に 1.7 mm のテストパッドを 2 つ出しています。
 
 - 表面のみ、21 点。
 - アップロードするファイル:
-  - ガーバー: `fab/kvm-board-gerbers.zip`
+  - ガーバー: `fab/serial-km-emulator-gerbers.zip`
   - BOM: `fab/bom_jlcpcb.csv`
   - CPL: `fab/cpl_jlcpcb.csv`
 - ガーバー、ドリル、CPL はすべて基板左下を原点にした座標です（KiCad のドリル/配置原点を使用）。ガーバー zip と CPL はセットで再アップロードしてください。JLCPCB の部品ライブラリ向けの回転補正を入れてあります（SO-8/SO-16 +270°、SOT-23-6 +270°。Type-C、SOD-323、LED、0603 は回転補正なし）。Type-C は基板側でフットプリントを 180° 回して開口を左外側、SMT パッドを基板内側に置いています。CPL は JLC 側の原点に合わせて X を 1.571 mm 補正しており、出力は J1/J2 とも 270°、位置はどちらも X 3.7 mm（Y は J1 20.7 mm、J2 10.7 mm）です。補正値は `scripts/make_jlc_files.py` にあります。実装プレビューで向きを確認してください。
@@ -110,7 +110,7 @@ U1 の右側に 1.7 mm のテストパッドを 2 つ出しています。
 - グレーベタが基板、その外側の明るいグレーの帯がケース内壁との 0.5 mm クリアランスです。切り抜いてトレイに落とせます。
 - 右側の網掛けがケースのラッチ張り出しです。基板のまっすぐな右辺は、この張り出しから 0.5 mm 離して置きます。
 - 下部の 100 mm 目盛りが 100 mm になっていなければ、印刷倍率がずれています。
-- `python3 scripts/gen_print_sheet.py` で作り直せます（基板外形は `kvm-board.kicad_pcb` の Edge.Cuts から読みます）。
+- `python3 scripts/gen_print_sheet.py` で作り直せます（基板外形は `serial-km-emulator.kicad_pcb` の Edge.Cuts から読みます）。
 
 ### ケース寸法
 
@@ -162,23 +162,23 @@ s.write(bytes.fromhex("57 AB 00 02 08 00 00 00 00 00 00 00 00 0C"))  # release
 - Type-C の 4 つの VBUS 接点はすべて接続しています。VBUS パッドは 2 接点ずつ重なっているので、各コネクタ 2 個の 0.5/0.3 mm ビアをパッドの外側に置き、B.Cu で引き回しています。
 - GND は両面ベタ。USB の D+/D- は全速 12 Mbps なので、特にインピーダンス制御はしていません。
 - 部品番号のテキストは U1/U2 以外はシルクから外しています（実装は CPL で行うため）。
-- J1/J2 は 10.0 mm ピッチで、シェル同士は 1.06 mm 空いています。ライブラリのコートヤード（±5.32 mm）はシェル（8.94 mm）より広く、2 個並べると 0.64 mm 重なるため、`kvm-board.kicad_dru` でこの 2 個の組み合わせだけコートヤードの重なりを許可しています。
+- J1/J2 は 10.0 mm ピッチで、シェル同士は 1.06 mm 空いています。ライブラリのコートヤード（±5.32 mm）はシェル（8.94 mm）より広く、2 個並べると 0.64 mm 重なるため、`serial-km-emulator.kicad_dru` でこの 2 個の組み合わせだけコートヤードの重なりを許可しています。
 
 ## ファイル構成
 
 ```
-kvm-board.kicad_pro       KiCad プロジェクト（DRC ルール・ネットクラス込み）
-kvm-board.kicad_dru       J1/J2 のコートヤード重なりだけを許可する DRC ルール
-kvm-board.kicad_sch       回路図
-kvm-board.kicad_pcb       基板（配線・ベタ済み）
-lib/kvm.kicad_sym         シンボルライブラリ
-lib/KVM.pretty/           フットプリント（KiCad 公式ライブラリから取得）
-fp-lib-table              KVM.pretty の登録
-sym-lib-table             kvm.kicad_sym の登録
-fab/                      ガーバー zip、BOM、CPL、KiCad 位置ファイル
-docs/                     回路図 PDF、基板画像
-scripts/                  設計データ生成スクリプト
-AGENT.md                  エージェント向けの再生成・検証手順
+serial-km-emulator.kicad_pro  KiCad プロジェクト（DRC ルール・ネットクラス込み）
+serial-km-emulator.kicad_dru  J1/J2 のコートヤード重なりだけを許可する DRC ルール
+serial-km-emulator.kicad_sch  回路図
+serial-km-emulator.kicad_pcb  基板（配線・ベタ済み）
+lib/kvm.kicad_sym             シンボルライブラリ
+lib/KVM.pretty/               フットプリント（KiCad 公式ライブラリから取得）
+fp-lib-table                  KVM.pretty の登録
+sym-lib-table                 kvm.kicad_sym の登録
+fab/                          ガーバー zip、BOM、CPL、KiCad 位置ファイル
+docs/                         回路図 PDF、基板画像
+scripts/                      設計データ生成スクリプト
+AGENT.md                      エージェント向けの再生成・検証手順
 ```
 
 ## 再生成
@@ -196,7 +196,7 @@ python3 scripts/gen_pcb.py     # 基板（ゼロから生成）
 
 Docker しかない場合は `scripts/kicad.sh` 経由で同じコマンドを実行できます。手順は [AGENT.md](AGENT.md) にまとめています。
 
-`kvm-board.kicad_pcb` は `scripts/gen_pcb.py` が生成します。GUI で直接編集すると次回の生成で上書きされるので、変更はスクリプト側に入れてください。回路図も同様に `scripts/gen_sch.py` から生成しています。
+`serial-km-emulator.kicad_pcb` は `scripts/gen_pcb.py` が生成します。GUI で直接編集すると次回の生成で上書きされるので、変更はスクリプト側に入れてください。回路図も同様に `scripts/gen_sch.py` から生成しています。
 
 ## 検証
 
