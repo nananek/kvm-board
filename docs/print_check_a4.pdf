@@ -10,7 +10,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 841.89 595.276] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
 endobj
 4 0 obj
-<< /Length 10749 >>
+<< /Length 9491 >>
 stream
 q
 2.835 0 0 2.835 0 0 cm
@@ -28,9 +28,9 @@ BT /F1 1 Tf 3 0 0 3 30 178.5 Tm (If the 100 mm scale at the bottom does not meas
 [1.5 1] 0 d 0.12 w 96.5 132.9 m 88.1 132.9 l S
 [1.5 1] 0 d 0.12 w 88.1 132.9 m 88.1 111.5 l S
 BT /F1 1 Tf 0 2.4 -2.4 0 90.3 115.5 Tm (latch) Tj ET
-0.87 G 1 w 30 141.4 m 30.01 141.596 l 30.038 141.79 l 30.086 141.981 l 30.152 142.165 l 30.236 142.343 l 30.337 142.511 l 30.454 142.669 l 30.586 142.814 l 30.731 142.946 l 30.889 143.063 l 31.057 143.164 l 31.235 143.248 l 31.419 143.314 l 31.61 143.362 l 31.804 143.39 l 32 143.4 l 87.6 143.4 l 87.6 112 l 32 112 l 31.804 112.01 l 31.61 112.038 l 31.419 112.086 l 31.235 112.152 l 31.057 112.236 l 30.889 112.337 l 30.731 112.454 l 30.586 112.586 l 30.454 112.731 l 30.337 112.889 l 30.236 113.057 l 30.152 113.235 l 30.086 113.419 l 30.038 113.61 l 30.01 113.804 l 30 114 l h S 0 G
-0.68 g 30 141.4 m 30.01 141.596 l 30.038 141.79 l 30.086 141.981 l 30.152 142.165 l 30.236 142.343 l 30.337 142.511 l 30.454 142.669 l 30.586 142.814 l 30.731 142.946 l 30.889 143.063 l 31.057 143.164 l 31.235 143.248 l 31.419 143.314 l 31.61 143.362 l 31.804 143.39 l 32 143.4 l 87.6 143.4 l 87.6 112 l 32 112 l 31.804 112.01 l 31.61 112.038 l 31.419 112.086 l 31.235 112.152 l 31.057 112.236 l 30.889 112.337 l 30.731 112.454 l 30.586 112.586 l 30.454 112.731 l 30.337 112.889 l 30.236 113.057 l 30.152 113.235 l 30.086 113.419 l 30.038 113.61 l 30.01 113.804 l 30 114 l h f 0 g
-0.25 G 0.15 w 30 141.4 m 30.01 141.596 l 30.038 141.79 l 30.086 141.981 l 30.152 142.165 l 30.236 142.343 l 30.337 142.511 l 30.454 142.669 l 30.586 142.814 l 30.731 142.946 l 30.889 143.063 l 31.057 143.164 l 31.235 143.248 l 31.419 143.314 l 31.61 143.362 l 31.804 143.39 l 32 143.4 l 87.6 143.4 l 87.6 112 l 32 112 l 31.804 112.01 l 31.61 112.038 l 31.419 112.086 l 31.235 112.152 l 31.057 112.236 l 30.889 112.337 l 30.731 112.454 l 30.586 112.586 l 30.454 112.731 l 30.337 112.889 l 30.236 113.057 l 30.152 113.235 l 30.086 113.419 l 30.038 113.61 l 30.01 113.804 l 30 114 l h S 0 G
+0.87 G 1 w 30 141.4 m 32 143.4 l 87.6 143.4 l 87.6 114 l 85.6 112 l 32 112 l 30 114 l h S 0 G
+0.68 g 30 141.4 m 32 143.4 l 87.6 143.4 l 87.6 114 l 85.6 112 l 32 112 l 30 114 l h f 0 g
+0.25 G 0.15 w 30 141.4 m 32 143.4 l 87.6 143.4 l 87.6 114 l 85.6 112 l 32 112 l 30 114 l h S 0 G
 [1 1] 0 d 0.15 w 28.479 128.23 m 35.779 128.23 l S
 [1 1] 0 d 0.15 w 35.779 128.23 m 35.779 137.17 l S
 [1 1] 0 d 0.15 w 35.779 137.17 m 28.479 137.17 l S
@@ -75,32 +75,34 @@ BT /F1 1 Tf 2.8 0 0 2.8 45 86.4 Tm (0.5 mm case clearance \(light grey\)) Tj ET
 BT /F1 1 Tf 2.8 0 0 2.8 45 79 Tm (connector centre line) Tj ET
 0.9 g 30 74 m 42 74 l 42 77.2 l 30 77.2 l h f 0 g
 BT /F1 1 Tf 2.8 0 0 2.8 45 74.4 Tm (case latch island \(do not cover\)) Tj ET
-BT /F1 1 Tf 4 0 0 4 132 172 Tm (HOW TO CHECK) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 165.5 Tm (1. Print this page at 100% / 'Actual size'.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 161.8 Tm (2. Measure the 100 mm scale below with a steel rule.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 158.1 Tm (3. Cut out the solid grey board and drop it into the tray.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 154.4 Tm (4. Board 57.6 x 31.4, case inner 67.0 x 32.4. The light) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 150.7 Tm (   grey band is the 0.5 mm clearance to the left, top and) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 147 Tm (   bottom walls.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 143.3 Tm (5. The right edge is one straight cut, 0.5 mm from the) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 139.6 Tm (   latch island. The right 8.9 mm of the tray stays empty.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 135.9 Tm (6. Both Type-C mouths are on the left edge at 10.7 and) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 132.2 Tm (   20.7 mm from the top \(5.0 mm either side of centre\).) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 128.5 Tm (   Each mouth overhangs the edge by 1.5 mm.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 124.8 Tm (7. Cut one 20 x 4 mm opening through the tray wall,) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 121.1 Tm (   centred between the two dashed centre lines. Both) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 117.4 Tm (   ports sit inside the lid notch, so the lid is not cut.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 113.7 Tm (   Chamfer the outside by about 0.3 mm.) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 110 Tm (8. There are no mounting holes: use tape or foam, with) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 106.3 Tm (   about 1 mm spacer under the board.) Tj ET
+BT /F1 1 Tf 4 0 0 4 132 174 Tm (HOW TO CHECK) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 167.5 Tm (1. Print this page at 100% / 'Actual size'.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 163.8 Tm (2. Measure the 100 mm scale below with a steel rule.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 160.1 Tm (3. Cut out the solid grey board and drop it into the tray.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 156.4 Tm (4. Board 57.6 x 31.4, case inner 67.0 x 32.4. The light) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 152.7 Tm (   grey band is the 0.5 mm clearance to the left, top and) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 149 Tm (   bottom walls.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 145.3 Tm (5. The right edge is one straight cut, 0.5 mm from the) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 141.6 Tm (   latch island. The right 8.9 mm of the tray stays empty.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 137.9 Tm (   The top-left, bottom-left and bottom-right corners have) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 134.2 Tm (   2 mm 45 degree punch cuts; the top-right stays square.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 130.5 Tm (6. Both Type-C mouths are on the left edge at 10.7 and) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 126.8 Tm (   20.7 mm from the top \(5.0 mm either side of centre\).) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 123.1 Tm (   Each mouth overhangs the edge by 1.5 mm.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 119.4 Tm (7. Cut one 20 x 4 mm opening through the tray wall,) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 115.7 Tm (   centred between the two dashed centre lines. Both) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 112 Tm (   ports sit inside the lid notch, so the lid is not cut.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 108.3 Tm (   Chamfer the outside by about 0.3 mm.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 104.6 Tm (8. No mounting holes: use tape or foam with a 1 mm spacer.) Tj ET
 BT /F1 1 Tf 3.4 0 0 3.4 132 100 Tm (DIMENSIONS \(mm\)) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 94 Tm (board          57.6 x 31.4 x 1.6) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 88.8 Tm (case           67.0 x 32.4 inner, 1.0 wall) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 83.6 Tm (left/top/bottom gap 0.5) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 78.4 Tm (right edge     0.5 from the latch island) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 73.2 Tm (J1 / J2 centre 10.7 / 20.7 from the top) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 68 Tm (connector pitch 10.0 \(5.0 each side of centre\)) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 62.8 Tm (mouth          1.5 past the left edge) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 73.2 Tm (corner cuts    2.0 x 45 deg \(TL, BL, BR\)) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 68 Tm (J1 / J2 centre 10.7 / 20.7 from the top) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 62.8 Tm (connector pitch 10.0 \(5.0 each side of centre\)) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 57.6 Tm (mouth          1.5 past the left edge) Tj ET
 [] 0 d 0.3 w 30 52 m 130 52 l S
 [] 0 d 0.3 w 30 52 m 30 55.2 l S
 [] 0 d 0.15 w 31 52 m 31 53 l S
@@ -221,9 +223,9 @@ xref
 0000000064 00000 n 
 0000000121 00000 n 
 0000000254 00000 n 
-0000011055 00000 n 
+0000009796 00000 n 
 trailer
 << /Size 6 /Root 1 0 R >>
 startxref
-11152
+9893
 %%EOF

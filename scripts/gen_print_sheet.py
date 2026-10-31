@@ -275,7 +275,7 @@ def main():
     s.text("case latch island (do not cover)", BX + 15, ly - 17.6, 2.8)
 
     # --- notes -----------------------------------------------------------
-    nx, ny = 132.0, 172.0
+    nx, ny = 132.0, 174.0
     s.text("HOW TO CHECK", nx, ny, 4.0)
     lines = [
         "1. Print this page at 100% / 'Actual size'.",
@@ -286,6 +286,8 @@ def main():
         "   bottom walls.",
         "5. The right edge is one straight cut, 0.5 mm from the",
         "   latch island. The right 8.9 mm of the tray stays empty.",
+        "   The top-left, bottom-left and bottom-right corners have",
+        "   2 mm 45 degree punch cuts; the top-right stays square.",
         "6. Both Type-C mouths are on the left edge at 10.7 and",
         "   20.7 mm from the top (5.0 mm either side of centre).",
         "   Each mouth overhangs the edge by 1.5 mm.",
@@ -293,8 +295,7 @@ def main():
         "   centred between the two dashed centre lines. Both",
         "   ports sit inside the lid notch, so the lid is not cut.",
         "   Chamfer the outside by about 0.3 mm.",
-        "8. There are no mounting holes: use tape or foam, with",
-        "   about 1 mm spacer under the board.",
+        "8. No mounting holes: use tape or foam with a 1 mm spacer.",
     ]
     for i, line in enumerate(lines):
         s.text(line, nx, ny - 6.5 - i * 3.7, 2.9)
@@ -305,6 +306,7 @@ def main():
         "case           67.0 x 32.4 inner, 1.0 wall",
         "left/top/bottom gap 0.5",
         "right edge     0.5 from the latch island",
+        "corner cuts    2.0 x 45 deg (TL, BL, BR)",
         "J1 / J2 centre 10.7 / 20.7 from the top",
         "connector pitch 10.0 (5.0 each side of centre)",
         "mouth          1.5 past the left edge",
