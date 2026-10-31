@@ -351,7 +351,8 @@ class Builder:
         V("VBUS_HID", 18.95, 28.0)
 
         # D2 cathode -> +5V.  Cross the lower-edge signals on B.Cu.
-        T(P5V, [self.pad("D2", "1"), (22.6, 26.0)], width=PWR_W)
+        T(P5V, [self.pad("D2", "1"), (22.0, 27.0), (22.0, 26.0),
+                (22.6, 26.0)], width=PWR_W)
         V(P5V, 22.6, 26.0)
         T(P5V, [(22.6, 26.0), (22.6, 30.0), (48.2, 30.0)],
           layer=pcbnew.B_Cu, width=PWR_W)
@@ -362,8 +363,8 @@ class Builder:
         V(P5V, 20.0, 6.0)
         T(P5V, [(20.0, 6.0), (20.0, 18.5)], layer=pcbnew.B_Cu, width=PWR_W)
         V(P5V, 20.0, 18.5)
-        T(P5V, [(20.0, 18.5), (22.575, 18.5), self.pad("U2", "5")], width=PWR_W)
-        T(P5V, [self.pad("C2", "1"), (14.675, 18.5), (20.0, 18.5)], width=SIG_W)
+        T(P5V, [(20.0, 18.5), (22.075, 18.5), (22.075, 15.905)], width=PWR_W)
+        T(P5V, [self.pad("C2", "1"), (16.275, 18.5), (20.0, 18.5)], width=SIG_W)
         # U1 (CH9329) VCC
         T(P5V, [(44.5, 6.0), (44.5, 10.825)], width=PWR_W)
         T(P5V, [(44.5, 10.825), self.pad("U1", "15")], width=PWR_W)
@@ -375,7 +376,7 @@ class Builder:
         T("USB_SER_DP", [self.pad("J1", "A6"), (8.9, 9.45)], width=SIG_W)
         T("USB_SER_DP", [self.pad("J1", "B6"), (8.9, 10.45)], width=SIG_W)
         T("USB_SER_DP", [(8.9, 9.45), (8.9, 10.45)], width=SIG_W)
-        T("USB_SER_DP", [(8.9, 10.45), (9.0, 10.45), (9.0, 12.55),
+        T("USB_SER_DP", [(8.9, 10.45), (9.2, 10.45), (9.2, 12.55),
                          self.pad("D3", "1")], width=SIG_W)
         T("USB_SER_DP", [self.pad("D3", "1"), self.pad("D3", "6")], width=SIG_W)
         T("USB_SER_DP", [self.pad("D3", "6"), (15.0, 12.55), (15.0, 12.095),
@@ -401,7 +402,7 @@ class Builder:
         T("USB_HID_DP", [self.pad("J2", "A6"), (8.9, 21.45)], width=SIG_W)
         T("USB_HID_DP", [self.pad("J2", "B6"), (8.9, 22.45)], width=SIG_W)
         T("USB_HID_DP", [(8.9, 21.45), (8.9, 22.45)], width=SIG_W)
-        T("USB_HID_DP", [(8.9, 21.45), (20.0, 21.45),
+        T("USB_HID_DP", [(8.9, 21.45), (9.5, 21.45), (9.5, 21.05),
                          self.pad("D4", "4")], width=SIG_W)
         T("USB_HID_DP", [self.pad("D4", "3"), self.pad("D4", "4")],
           width=SIG_W)
@@ -412,18 +413,18 @@ class Builder:
         V("USB_HID_DM", 7.8, 21.95, size=0.35, drill=0.15)
         T("USB_HID_DM", [(7.8, 20.95), (7.8, 21.95)],
           layer=pcbnew.B_Cu, width=SIG_W)
-        T("USB_HID_DM", [(7.8, 21.95), (18.8, 21.95), (19.8, 22.95)],
-          layer=pcbnew.B_Cu, width=SIG_W)
+        T("USB_HID_DM", [(7.8, 21.95), (18.8, 21.95), (18.8, 22.95),
+                         (19.8, 22.95)], layer=pcbnew.B_Cu, width=SIG_W)
         V("USB_HID_DM", 19.8, 22.95, size=0.35, drill=0.15)
         T("USB_HID_DM", [(19.8, 22.95), self.pad("D4", "6")], width=SIG_W)
         T("USB_HID_DM", [self.pad("D4", "1"), self.pad("D4", "6")],
           width=SIG_W)
 
         # CC pulldowns: stay on F.Cu above/below the data traces.
-        T("CC1_HID", [self.pad("J2", "A5"), (8.6, 20.45), (8.175, 17.5)],
-          width=SIG_W)
-        T("CC2_HID", [self.pad("J2", "B5"), (8.0, 23.45), (9.175, 24.5)],
-          width=SIG_W)
+        T("CC1_HID", [self.pad("J2", "A5"), (8.6, 20.45), (8.6, 17.5),
+                      (8.175, 17.5)], width=SIG_W)
+        T("CC2_HID", [self.pad("J2", "B5"), (8.0, 23.45), (8.0, 24.5),
+                      (9.175, 24.5)], width=SIG_W)
 
         # D4 -> U1.  DM is I/O1 (pins 1/6), DP is I/O2 (pins 3/4).  The two
         # runs use B.Cu to the right of U1, then short F.Cu stubs to the pins.
@@ -433,20 +434,22 @@ class Builder:
         T("USB_HID_DM", [(24.5, 22.95), (41.8, 22.95), (41.8, 14.2)],
           layer=pcbnew.B_Cu, width=SIG_W)
         V("USB_HID_DM", 41.8, 14.2, size=0.35, drill=0.15)
-        T("USB_HID_DM", [(41.8, 14.2), self.pad("U1", "13")], width=SIG_W)
+        T("USB_HID_DM", [(41.8, 14.2), (41.8, 13.365),
+                         self.pad("U1", "13")], width=SIG_W)
 
         T("USB_HID_DP", [self.pad("D4", "3"), (24.5, 21.05)], width=SIG_W)
         V("USB_HID_DP", 24.5, 21.05, size=0.35, drill=0.15)
         T("USB_HID_DP", [(24.5, 21.05), (41.2, 21.05), (41.2, 15.2)],
           layer=pcbnew.B_Cu, width=SIG_W)
         V("USB_HID_DP", 41.2, 15.2, size=0.35, drill=0.15)
-        T("USB_HID_DP", [(41.2, 15.2), self.pad("U1", "12")], width=SIG_W)
+        T("USB_HID_DP", [(41.2, 15.2), (41.2, 14.635),
+                         self.pad("U1", "12")], width=SIG_W)
 
         # ---------------- CC pulldowns (serial side) ----------------
         T("CC1_SER", [self.pad("J1", "A5"), (8.3, 8.45), (8.3, 2.0),
                       self.pad("R1", "1")], width=SIG_W)
-        T("CC2_SER", [self.pad("J1", "B5"), (8.6, 11.45), (8.175, 15.0)],
-          width=SIG_W)
+        T("CC2_SER", [self.pad("J1", "B5"), (8.6, 11.45), (8.6, 15.0),
+                      (8.175, 15.0)], width=SIG_W)
 
         # ---------------- UART between CH340N and CH9329 ----------------
         T("UART_9329_TX", [self.pad("U2", "6"), (23.5, 14.635), (23.5, 17.8),
@@ -457,11 +460,12 @@ class Builder:
 
         # ---------------- LED (cathode crosses the +5V rail on B.Cu) --------
         T("LED_A", [self.pad("R5", "2"), self.pad("LED1", "2")], width=SIG_W)
-        T("LED_ACT", [self.pad("LED1", "1"), (35.825, 5.0)], width=SIG_W)
-        V("LED_ACT", 35.825, 5.0)
-        T("LED_ACT", [(35.825, 5.0), (35.825, 8.0)], layer=pcbnew.B_Cu, width=SIG_W)
-        V("LED_ACT", 35.825, 8.0)
-        T("LED_ACT", [(35.825, 8.0), (33.425, 8.0), (33.425, 9.555),
+        led_x = self.pad("LED1", "1")[0]
+        T("LED_ACT", [self.pad("LED1", "1"), (led_x, 5.0)], width=SIG_W)
+        V("LED_ACT", led_x, 5.0)
+        T("LED_ACT", [(led_x, 5.0), (led_x, 8.0)], layer=pcbnew.B_Cu, width=SIG_W)
+        V("LED_ACT", led_x, 8.0)
+        T("LED_ACT", [(led_x, 8.0), (33.425, 8.0), (33.425, 9.555),
                       self.pad("U1", "1")], width=SIG_W)
 
         # ---------------- V33 / V3 ----------------
@@ -471,7 +475,7 @@ class Builder:
                      self.pad("U2", "8")], width=SIG_W)
 
         # ---------------- SET test pad (TP1) ----------------
-        T("SET", [self.pad("U1", "11"), (43.0, 15.905),
+        T("SET", [self.pad("U1", "11"), (44.0, 15.905),
                   self.pad("TP1", "1")], width=SIG_W)
 
         # ---------------- ground ----------------

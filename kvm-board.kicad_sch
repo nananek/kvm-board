@@ -8,7 +8,7 @@
     (title "CH9329 USB KVM emulator board")
     (rev "A")
     (comment 1 "UART(USB serial) to USB HID keyboard/mouse")
-    (comment 2 "Fits the measured FRISK case: 66.0 x 31.4 mm")
+    (comment 2 "Fits the measured FRISK case: 57.6 x 31.4 mm")
   )
   (lib_symbols
     (symbol "kvm:USB_C"
