@@ -4,7 +4,9 @@ Layout summary
 --------------
 Board 57.6 x 31.4 mm.  It is the 67.0 mm FRISK tray width minus the 0.5 mm
 left gap, the 0.5 mm gap to the latch island, and the 8.4 mm island depth,
-so the right edge is one straight cut.
+so the right edge is one straight cut.  The top-left, bottom-left and
+bottom-right corners are 2 mm 45 degree punch cuts; the top-right corner is
+square because the latch island leaves no case fillet there.
 J1 = serial (CH340N) and J2 = HID (CH9329) both sit on the left short edge,
 stacked around the vertical centre.  Their mouths overhang the edge by
 1.5 mm, through one opening cut in the tray wall.  The pair is pulled in to
@@ -28,6 +30,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FP_DIR = os.path.join(ROOT, "lib", "KVM.pretty")
 
 W, H = 57.6, 31.4
+# Corner punch cuts: 2 mm along each edge (a 45 degree chamfer).  The case
+# fillets are 2 mm, so this leaves the same clearance as the old radius
+# without making the fabricator route an arc.
+CHAMFER = 2.0
 # The old latch notch started 8.4 mm in from the 66.0 mm outline.  Cutting
 # the whole right side back to that line removes the lobe and the notch while
 # keeping the 0.5 mm clearance to the case's latch island.
@@ -74,39 +80,32 @@ def P(x, y):
     return pcbnew.VECTOR2I(pcbnew.FromMM(x), pcbnew.FromMM(y))
 
 
-def board_points(inset=0.0, steps=16):
+def board_points(inset=0.0):
     """Return the board outline as a closed polygon.
 
-    The left corners are rounded to match the case; the right edge is one
-    straight cut, because the latch-island lobe and notch are gone.  ``inset``
-    shrinks every edge for the GND zone.
+    The top-left, bottom-left and bottom-right corners are 2 mm 45 degree
+    punch cuts, as in the original mechanical spec.  A punch cut is cheaper
+    than routing a rounded corner, and the three cuts clear the case fillets.
+    The top-right corner stays square: it sits beside the latch island, where
+    the case has no fillet.  ``inset`` shrinks every edge for the GND zone.
     """
     left = inset
     right = W - inset
     top = inset
     bottom = H - inset
-    r_out = max(0.1, 2.0 - inset)
+    # An inward offset shifts a 45 degree chamfer by inset * sqrt(2), so its
+    # legs measured from the inset edges lose inset * (2 - sqrt(2)).
+    leg = CHAMFER - inset * (2.0 - math.sqrt(2.0))
 
-    def arc(cx, cy, r, a0, a1):
-        out = []
-        for i in range(steps + 1):
-            a = math.radians(a0 + (a1 - a0) * i / steps)
-            out.append((cx + r * math.cos(a), cy + r * math.sin(a)))
-        return out
-
-    pts = [(right, top)]
-    pts.append((right, bottom))
-    pts += arc(left + r_out, bottom - r_out, r_out, 90, 180)
-    pts.append((left, top + r_out))
-    pts += arc(left + r_out, top + r_out, r_out, 180, 270)
-    # Remove consecutive duplicates (arc endpoints shared with the next edge).
-    clean = []
-    for p in pts:
-        if not clean or abs(p[0] - clean[-1][0]) > 1e-6 or abs(p[1] - clean[-1][1]) > 1e-6:
-            clean.append(p)
-    if len(clean) > 1 and abs(clean[0][0] - clean[-1][0]) < 1e-6 and abs(clean[0][1] - clean[-1][1]) < 1e-6:
-        clean.pop()
-    return clean
+    return [
+        (right, top),                 # top-right: square
+        (right, bottom - leg),
+        (right - leg, bottom),        # bottom-right punch cut
+        (left + leg, bottom),
+        (left, bottom - leg),         # bottom-left punch cut
+        (left, top + leg),
+        (left + leg, top),            # top-left punch cut
+    ]
 
 
 
