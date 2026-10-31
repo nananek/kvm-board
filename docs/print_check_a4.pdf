@@ -10,7 +10,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 841.89 595.276] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
 endobj
 4 0 obj
-<< /Length 12530 >>
+<< /Length 12537 >>
 stream
 q
 2.835 0 0 2.835 0 0 cm
@@ -74,7 +74,7 @@ BT /F1 1 Tf 2.9 0 0 2.9 132 157.1 Tm (3. Cut out the solid grey board and drop i
 BT /F1 1 Tf 2.9 0 0 2.9 132 152.9 Tm (4. The light grey band is the 0.5 mm clearance to the) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 148.7 Tm (   case wall: board 66.0 x 31.4, case inner 67.0 x 32.4.) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 144.5 Tm (5. The notch \(8.4 x 20.9 mm\) must clear the latch) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 140.3 Tm (   island; the upper-right lobe is 10.5 mm wide.) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 140.3 Tm (   island; the 10.5 mm lobe leaves 0.5 mm clearance.) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 136.1 Tm (6. J1 \(left\) and J2 \(right\) mouths sit 1.5 / 1.28 mm past) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 131.9 Tm (   the board edge. J1 is flush with the outer wall; J2 is) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 127.7 Tm (   about 0.2 mm inside it.) Tj ET
@@ -90,7 +90,7 @@ BT /F1 1 Tf 2.9 0 0 2.9 132 83.6 Tm (wall gap       0.5 all round) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 78.4 Tm (J1 / J2 centre 15.7 / 5.48 from the top edge) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 73.2 Tm (mouth          J1 1.5 / J2 1.28 past the edge) Tj ET
 BT /F1 1 Tf 2.9 0 0 2.9 132 68 Tm (notch          8.4 x 20.9, lower-right) Tj ET
-BT /F1 1 Tf 2.9 0 0 2.9 132 62.8 Tm (upper-right lobe 10.5 wide) Tj ET
+BT /F1 1 Tf 2.9 0 0 2.9 132 62.8 Tm (upper-right lobe 10.5 mm wide) Tj ET
 [] 0 d 0.3 w 30 66 m 130 66 l S
 [] 0 d 0.3 w 30 66 m 30 69.2 l S
 [] 0 d 0.15 w 31 66 m 31 67 l S
@@ -211,9 +211,9 @@ xref
 0000000064 00000 n 
 0000000121 00000 n 
 0000000254 00000 n 
-0000012836 00000 n 
+0000012843 00000 n 
 trailer
 << /Size 6 /Root 1 0 R >>
 startxref
-12933
+12940
 %%EOF

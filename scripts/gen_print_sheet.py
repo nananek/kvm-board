@@ -268,7 +268,7 @@ def main():
         "4. The light grey band is the 0.5 mm clearance to the",
         "   case wall: board 66.0 x 31.4, case inner 67.0 x 32.4.",
         "5. The notch (8.4 x 20.9 mm) must clear the latch",
-        "   island; the upper-right lobe is 10.5 mm wide.",
+        "   island; the 10.5 mm lobe leaves 0.5 mm clearance.",
         "6. J1 (left) and J2 (right) mouths sit 1.5 / 1.28 mm past",
         "   the board edge. J1 is flush with the outer wall; J2 is",
         "   about 0.2 mm inside it.",
@@ -289,7 +289,7 @@ def main():
         "J1 / J2 centre 15.7 / 5.48 from the top edge",
         "mouth          J1 1.5 / J2 1.28 past the edge",
         "notch          8.4 x 20.9, lower-right",
-        "upper-right lobe 10.5 wide",
+        "upper-right lobe 10.5 mm wide",
     ]):
         s.text(line, nx, 94.0 - i * 5.2, 2.9)
 
