@@ -1,0 +1,10 @@
+(version 1)
+
+# J1 and J2 are two of the same Type-C receptacle stacked at a 10.0 mm
+# pitch.  The metal shells keep 1.06 mm between them, but the library
+# courtyard is +/-5.32 mm (wider than the 8.94 mm shell), so the two
+# courtyards overlap by 0.64 mm.  Allow that pair only; every other
+# courtyard check keeps the default clearance.
+(rule "J1/J2 stacked Type-C courtyard"
+  (condition "A.Reference == 'J1' && B.Reference == 'J2'")
+  (constraint courtyard_clearance (min -2mm)))
