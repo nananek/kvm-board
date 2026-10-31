@@ -2,11 +2,12 @@
 
 Layout summary
 --------------
-Board 65.4 x 31.4 mm, shaped to the published FRISK-CASE 3D model
-(66.4 x 32.4 mm inner tray with a latch island in one corner).
+Board 66.0 x 31.4 mm, shaped to the measured FRISK case
+(67.0 x 32.4 mm inner tray, 1.0 mm wall, with a latch island in one corner).
 J1 = serial (CH340N) Type-C on the left short edge, J2 = HID (CH9329)
 Type-C on the right short edge.  Both connector mouths overhang the board
-edge (J1 1.5 mm, J2 1.4 mm) so a plug can reach them through the case wall.
+edge by 1.5 mm: the board sits 0.5 mm from the inner wall, so the mouths are
+flush with the 1.0 mm-thick case wall and a plug can reach them.
 Both connectors are sinks (5.1k CC pulldowns).
 +5V is diode-OR'ed from both VBUS pins and distributed on the top layer.
 GND is a copper pour on both layers.
@@ -24,23 +25,25 @@ from design import PROJECT, PARTS, GND, P5V  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FP_DIR = os.path.join(ROOT, "lib", "KVM.pretty")
 
-W, H = 65.4, 31.4
-# Latch-island notch in the lower-right corner (case model coordinates).
-NOTCH_X = W - 6.8
-NOTCH_Y = 11.6
+W, H = 66.0, 31.4
+# Latch-island notch in the lower-right corner.  The measured case leaves an
+# 11.0 mm-high opening above the island (where J2 sits) and the island is
+# 8.4 mm deep, so the board is cut back by the same values.
+NOTCH_X = W - 8.4
+NOTCH_Y = 11.0
 THICKNESS = 1.6
 
 # reference -> (footprint name, x, y, rotation)
 PLACE = {
-    "J1": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 2.129, 14.0, 270),
-    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 63.171, 5.7, 90),
+    "J1": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 2.129, 15.7, 270),
+    "J2": ("USB_C_Receptacle_HRO_TYPE-C-31-M-12", 63.79, 5.7, 90),
     "U2": ("SO-8_3.9x4.9mm_P1.27mm", 19.5, 14.0, 0),
     "U1": ("SO-16_3.9x9.9mm_P1.27mm", 36.5, 14.0, 0),
     "D1": ("D_SOD-323", 11.0, 6.0, 180),
     "D2": ("D_SOD-323", 53.15, 6.0, 0),
     "D3": ("SOT-23-6", 13.0, 13.5, 0),
     "D4": ("SOT-23-6", 52.0, 9.2, 180),
-    "R1": ("R_0603_1608Metric", 7.0, 21.5, 0),
+    "R1": ("R_0603_1608Metric", 7.0, 21.8, 0),
     "R2": ("R_0603_1608Metric", 13.0, 8.5, 0),
     "R3": ("R_0603_1608Metric", 47.0, 6.8, 0),
     "R4": ("R_0603_1608Metric", 47.0, 3.75, 0),
@@ -94,8 +97,9 @@ def l_shape_points(inset=0.0, steps=16):
     pts += arc(right - r_out, top + r_out, r_out, 270, 360)
     pts.append((right, y0 - r_notch))
     pts += arc(right - r_notch, y0 - r_notch, r_notch, 0, 90)
-    pts.append((x0 + r_notch, y0))
-    pts += arc(x0 + r_notch, y0 + r_notch, r_notch, 270, 180)
+    # The inner corner of the latch notch is square: the case island has a
+    # square corner there, so a fillet would eat into the clearance.
+    pts.append((x0, y0))
     pts.append((x0, bottom - r_notch))
     pts += arc(x0 - r_notch, bottom - r_notch, r_notch, 0, 90)
     pts.append((left + r_out, bottom))
@@ -249,10 +253,10 @@ class Builder:
         text("K", 52.1, 4.6, 0.8)
         text("K", 37.0, 5.2, 0.8)
         # A1 marks: J1 is rotated 270 deg (A1 pad at the top edge), J2 is
-        # rotated 90 deg (A1 pad at the bottom edge).  J2 moved to the
+        # rotated 90 deg (A1 pad at the bottom edge).  J2 sits in the
         # upper-right lobe of the case, above the latch notch.
-        text("A1", 3.5, 8.3, 0.8)
-        text("A1", 61.6, 11.0, 0.8)
+        text("A1", 3.5, 10.0, 0.8)
+        text("A1", 58.6, 9.9, 0.8)
         text("U1 CH9329   U2 CH340N", 28.0, 22.5, 0.8, 0.1)
         text("D1,D2 BAT54WS   D3,D4 USBLC6-2SC6", 28.0, 23.6, 0.8, 0.1)
         # SET / GND test pads to the right of U1 (TP1 / TP2)
@@ -316,9 +320,9 @@ class Builder:
         # serial VBUS: both VBUS pads -> back layer -> D1 anode
         for num in ("A4", "A9"):
             V("VBUS_SER", *self.pad("J1", num))
-        T("VBUS_SER", [self.pad("J1", "A4"), (7.674, 12.0), (3.8, 12.0)],
+        T("VBUS_SER", [self.pad("J1", "A4"), (7.674, 13.7), (3.8, 13.7)],
           layer=pcbnew.B_Cu, width=PWR_W)
-        T("VBUS_SER", [self.pad("J1", "A9"), (7.674, 15.8), (3.8, 15.8),
+        T("VBUS_SER", [self.pad("J1", "A9"), (7.674, 17.5), (3.8, 17.5),
                        (3.8, 6.0), (9.8, 6.0)], layer=pcbnew.B_Cu, width=PWR_W)
         V("VBUS_SER", 9.8, 6.0)
         T("VBUS_SER", [(9.8, 6.0), self.pad("D1", "2")], width=PWR_W)
@@ -374,20 +378,20 @@ class Builder:
 
 
         # ---------------- serial port USB ----------------
-        T("USB_SER_DP", [self.pad("J1", "A6"), (8.9, 13.75)], width=SIG_W)
-        T("USB_SER_DP", [self.pad("J1", "B6"), (8.9, 14.75)], width=SIG_W)
-        T("USB_SER_DP", [(8.9, 13.75), (8.9, 14.75)], width=SIG_W)
-        T("USB_SER_DP", [(8.9, 13.75), (9.0, 13.75), (9.0, 12.55),
+        T("USB_SER_DP", [self.pad("J1", "A6"), (8.9, 15.45)], width=SIG_W)
+        T("USB_SER_DP", [self.pad("J1", "B6"), (8.9, 16.45)], width=SIG_W)
+        T("USB_SER_DP", [(8.9, 15.45), (8.9, 16.45)], width=SIG_W)
+        T("USB_SER_DP", [(8.9, 15.45), (9.0, 15.45), (9.0, 12.55),
                          self.pad("D3", "1")], width=SIG_W)
         T("USB_SER_DP", [self.pad("D3", "1"), self.pad("D3", "6")], width=SIG_W)
         T("USB_SER_DP", [self.pad("D3", "6"), (15.0, 12.55), (15.0, 12.095),
                          self.pad("U2", "1")], width=SIG_W)
-        T("USB_SER_DM", [self.pad("J1", "A7"), (8.4, 14.25)], width=SIG_W)
-        V("USB_SER_DM", 8.4, 14.25, size=0.35, drill=0.15)
-        T("USB_SER_DM", [self.pad("J1", "B7"), (8.4, 13.25)], width=SIG_W)
-        V("USB_SER_DM", 8.4, 13.25, size=0.35, drill=0.15)
-        T("USB_SER_DM", [(8.4, 13.25), (8.4, 14.25)], layer=pcbnew.B_Cu, width=SIG_W)
-        T("USB_SER_DM", [(8.4, 13.25), (9.3, 13.25), (9.3, 14.45),
+        T("USB_SER_DM", [self.pad("J1", "A7"), (8.4, 15.95)], width=SIG_W)
+        V("USB_SER_DM", 8.4, 15.95, size=0.35, drill=0.15)
+        T("USB_SER_DM", [self.pad("J1", "B7"), (8.4, 14.95)], width=SIG_W)
+        V("USB_SER_DM", 8.4, 14.95, size=0.35, drill=0.15)
+        T("USB_SER_DM", [(8.4, 14.95), (8.4, 15.95)], layer=pcbnew.B_Cu, width=SIG_W)
+        T("USB_SER_DM", [(8.4, 14.95), (9.3, 14.95), (9.3, 14.45),
                          (10.8, 14.45)], layer=pcbnew.B_Cu, width=SIG_W)
         V("USB_SER_DM", 10.8, 14.45, size=0.35, drill=0.15)
         T("USB_SER_DM", [(10.8, 14.45), self.pad("D3", "3")], width=SIG_W)
@@ -458,9 +462,9 @@ class Builder:
         T("USB_HID_DP", [(40.0, 14.0), self.pad("U1", "12")], width=SIG_W)
 
         # ---------------- CC pulldowns (serial side) ----------------
-        T("CC1_SER", [self.pad("J1", "A5"), (3.7, 12.75), (3.7, 21.0),
+        T("CC1_SER", [self.pad("J1", "A5"), (3.7, 14.45), (3.7, 21.0),
                       (6.175, 21.0), self.pad("R1", "1")], width=SIG_W)
-        T("CC2_SER", [self.pad("J1", "B5"), (9.0, 15.75), (9.0, 15.2),
+        T("CC2_SER", [self.pad("J1", "B5"), (9.4, 17.45), (9.4, 15.2),
                       (10.0, 15.2), (10.0, 13.0)], width=SIG_W)
         V("CC2_SER", 10.0, 13.0, size=0.35, drill=0.15)
         T("CC2_SER", [(10.0, 13.0), (10.0, 11.0)], layer=pcbnew.B_Cu, width=SIG_W)
@@ -495,7 +499,7 @@ class Builder:
 
         # ---------------- ground ----------------
         for x, y in ((42.85, 9.0),
-                     (26.0, 11.5), (42.325, 7.0), (29.825, 8.0), (7.825, 21.5),
+                     (26.0, 11.5), (42.325, 7.0), (29.825, 8.0), (7.825, 21.8),
                      (13.825, 8.5), (47.825, 6.8), (47.825, 3.75)):
             V(GND, x, y)
         T(GND, [self.pad("U1", "14"), (40.0, 12.095)], width=SIG_W)

@@ -20,7 +20,7 @@ FAB = os.path.join(ROOT, "fab")
 # turned 180 degrees so the mouth is at the board edge and the SMT pads sit at
 # the rear, matching the JLC part.  The board origin moved with the pads, so
 # the CPL position is shifted back by 1.571 mm to keep the JLC origin at the
-# same place (J1 3.7 mm, J2 61.6 mm).
+# same place (J1 3.7 mm, J2 62.2 mm).
 USB_C_FOOTPRINT = "USB_C_Receptacle_HRO_TYPE-C-31-M-12"
 USB_C_POSITION_OFFSET = 1.571
 

@@ -25,12 +25,12 @@ A4_W, A4_H = 297.0, 210.0
 
 # Board placement on the page (mm, origin at the bottom-left of the board).
 BX, BY = 30.0, 112.0
-BOARD_W, BOARD_H = 65.4, 31.4
+BOARD_W, BOARD_H = 66.0, 31.4
 CASE_CLEARANCE = 0.5
 
 # Connector centres in board coordinates (y from the top edge).
-J1_Y, J2_Y = 14.0, 5.7
-J1_X, J2_X = 2.129, 63.171
+J1_Y, J2_Y = 15.7, 5.7
+J1_X, J2_X = 2.129, 63.79
 SHELL_X, SHELL_Y = 8.94, 7.3  # footprint body before rotation (x, y)
 
 
@@ -51,6 +51,29 @@ def read_outline(path):
     if not segs:
         raise SystemExit("no Edge.Cuts segments found in " + path)
     return segs
+
+
+def outline_polygon(segs, tol=1e-3):
+    """Chain Edge.Cuts segments into one closed polygon."""
+    remaining = list(segs)
+    start, end = remaining.pop(0)
+    pts = [start, end]
+    while remaining:
+        last = pts[-1]
+        for i, (a, b) in enumerate(remaining):
+            if abs(last[0] - a[0]) < tol and abs(last[1] - a[1]) < tol:
+                pts.append(b)
+                remaining.pop(i)
+                break
+            if abs(last[0] - b[0]) < tol and abs(last[1] - b[1]) < tol:
+                pts.append(a)
+                remaining.pop(i)
+                break
+        else:
+            raise SystemExit("Edge.Cuts is not a single closed loop")
+    if abs(pts[0][0] - pts[-1][0]) < tol and abs(pts[0][1] - pts[-1][1]) < tol:
+        pts.pop()
+    return pts
 
 
 def read_silk_text(path):
@@ -95,6 +118,20 @@ class Sheet:
     def polyline(self, pts, width=0.2, dash=None):
         for a, b in zip(pts, pts[1:]):
             self.line(a[0], a[1], b[0], b[1], width, dash)
+
+    def _path(self, pts):
+        out = ["%s %s m" % (self._num(pts[0][0]), self._num(pts[0][1]))]
+        for x, y in pts[1:]:
+            out.append("%s %s l" % (self._num(x), self._num(y)))
+        out.append("h")
+        return " ".join(out)
+
+    def fill(self, pts, gray=0.7):
+        self.ops.append("%s g %s f 0 g" % (self._num(gray), self._path(pts)))
+
+    def stroke_polygon(self, pts, width=1.0, gray=0.85):
+        self.ops.append("%s G %s w %s S 0 G" % (
+            self._num(gray), self._num(width), self._path(pts)))
 
     def text(self, s, x, y, size=3.0, angle=0.0):
         s = s.replace("\\", r"\\").replace("(", r"\(").replace(")", r"\)")
@@ -170,15 +207,14 @@ def main():
     s.text("If the 100 mm scale at the bottom does not measure 100 mm, the print is scaled.",
            BX, 178.5, 3.0)
 
-    # --- case inner tray (board + 0.5 mm on every side) -----------------
-    s.rect(BX - CASE_CLEARANCE, BY - CASE_CLEARANCE,
-           BOARD_W + 2 * CASE_CLEARANCE, BOARD_H + 2 * CASE_CLEARANCE,
-           0.25, dash=(2.0, 1.2))
-
-    # --- board outline --------------------------------------------------
-    for (x1, y1), (x2, y2) in read_outline(PCB):
-        p1, p2 = b2p(x1, y1), b2p(x2, y2)
-        s.line(p1[0], p1[1], p2[0], p2[1], 0.35)
+    # --- board outline and 0.5 mm case-clearance band -------------------
+    poly = outline_polygon(read_outline(PCB))
+    pts = [b2p(x, y) for x, y in poly]
+    # A 1.0 mm wide stroke centred on the edge leaves a 0.5 mm light-grey
+    # band outside the board once the board itself is filled on top.
+    s.stroke_polygon(pts, width=2 * CASE_CLEARANCE, gray=0.87)
+    s.fill(pts, gray=0.68)
+    s.stroke_polygon(pts, width=0.15, gray=0.25)
 
     # --- connector bodies and mouths ------------------------------------
     for ref, cx, cy, rot in (("J1", J1_X, J1_Y, 270), ("J2", J2_X, J2_Y, 90)):
@@ -203,18 +239,21 @@ def main():
         s.line(BX - 6, py, BX + BOARD_W + 19, py, 0.12, dash=(1.5, 1.5))
 
     # --- dimensions ------------------------------------------------------
-    dim_h(s, BX, BX + BOARD_W, BY - 9, "65.4")
+    dim_h(s, BX, BX + BOARD_W, BY - 9, "66.0")
     dim_v(s, BX - 8, BY, BY + BOARD_H, "31.4")
-    dim_v(s, BX + BOARD_W + 4, BY, BY + 19.8, "19.8")
-    dim_v(s, BX + BOARD_W + 11, BY + BOARD_H - J1_Y, BY + BOARD_H, "14.0")
+    dim_v(s, BX + BOARD_W + 4, BY, BY + BOARD_H - 11.0, "20.4")
+    dim_v(s, BX + BOARD_W + 11, BY + BOARD_H - J1_Y, BY + BOARD_H, "15.7")
     dim_v(s, BX + BOARD_W + 18, BY + BOARD_H - J2_Y, BY + BOARD_H, "5.7")
 
     # --- legend ----------------------------------------------------------
     ly = 92.0
-    s.line(BX, ly, BX + 12, ly, 0.35)
-    s.text("board outline (solid, 1:1)", BX + 15, ly - 1.0, 2.8)
-    s.line(BX, ly - 6, BX + 12, ly - 6, 0.25, dash=(2.0, 1.2))
-    s.text("case tray 66.4 x 32.4 (dashed)", BX + 15, ly - 7.0, 2.8)
+    s.fill([(BX, ly), (BX + 12, ly), (BX + 12, ly + 3.2), (BX, ly + 3.2)], 0.68)
+    s.stroke_polygon([(BX, ly), (BX + 12, ly), (BX + 12, ly + 3.2),
+                      (BX, ly + 3.2)], 0.15, 0.25)
+    s.text("board (solid grey, 1:1)", BX + 15, ly - 0.4, 2.8)
+    s.fill([(BX, ly - 6), (BX + 12, ly - 6), (BX + 12, ly - 2.8),
+            (BX, ly - 2.8)], 0.87)
+    s.text("0.5 mm case clearance (light grey)", BX + 15, ly - 5.6, 2.8)
     s.line(BX, ly - 12, BX + 12, ly - 12, 0.12, dash=(1.5, 1.5))
     s.text("connector centre line", BX + 15, ly - 13.0, 2.8)
 
@@ -224,34 +263,33 @@ def main():
     lines = [
         "1. Print this page at 100% / 'Actual size'.",
         "2. Measure the 100 mm scale below with a steel rule.",
-        "3. Cut out the solid outline and drop it into the tray.",
-        "4. The dashed line is the tray: 66.4 x 32.4 mm; the",
-        "   board is 0.5 mm smaller on every side.",
-        "5. The notch (6.8 x 19.8 mm) must clear the latch",
+        "3. Cut out the solid grey board and drop it into the tray.",
+        "4. The light grey band is the 0.5 mm clearance to the",
+        "   case wall: board 66.0 x 31.4, case inner 67.0 x 32.4.",
+        "5. The notch (8.4 x 20.4 mm) must clear the latch",
         "   island in the lower-right corner of the tray.",
-        "6. J1 (left) and J2 (right) mouths protrude 1.5 mm",
-        "   and 1.4 mm past the board edge. Cut 10 x 4 mm",
-        "   openings through the whole wall, 1.4 to 5.1 mm",
-        "   above the tray floor.",
-        "7. Chamfer the outside of each opening by about 0.3 mm,",
-        "   and centre the board in the tray.",
+        "6. J1 (left) and J2 (right) mouths sit 1.5 mm past the",
+        "   board edge. The board is 0.5 mm from the 1.0 mm wall,",
+        "   so the mouths are flush with the outer surface.",
+        "7. Cut 10 x 4 mm openings through the whole wall, 1.4 to",
+        "   5.1 mm above the tray floor. Chamfer the outside by",
+        "   about 0.3 mm, and centre the board in the tray.",
         "8. There are no mounting holes: use tape or foam, with",
         "   about 1 mm spacer under the board.",
     ]
     for i, line in enumerate(lines):
-        s.text(line, nx, ny - 6.5 - i * 4.3, 2.9)
+        s.text(line, nx, ny - 6.5 - i * 4.2, 2.9)
 
-    s.text("DIMENSIONS (mm)", nx, 99.0, 3.4)
+    s.text("DIMENSIONS (mm)", nx, 100.0, 3.4)
     for i, line in enumerate([
-        "board          65.4 x 31.4 x 1.6",
-        "case tray      66.4 x 32.4",
-        "case outer     69 x 37, tray depth 9.8",
-        "J1 centre      14.0 from the top edge",
-        "J2 centre      5.7 from the top edge",
-        "mouth          J1 1.5 / J2 1.4 mm past the edge",
-        "notch          6.8 x 19.8, lower-right",
+        "board          66.0 x 31.4 x 1.6",
+        "case           67.0 x 32.4 inner, 1.0 wall",
+        "wall gap       0.5 all round",
+        "J1 / J2 centre 15.7 / 5.7 from the top edge",
+        "mouth          J1 1.5 / J2 1.44 past the edge",
+        "notch          8.4 x 20.4, lower-right",
     ]):
-        s.text(line, nx, 94.0 - i * 4.6, 2.9)
+        s.text(line, nx, 94.0 - i * 5.2, 2.9)
 
     # --- 100 mm scale check ---------------------------------------------
     sx, sy, slen = BX, 66.0, 100.0
